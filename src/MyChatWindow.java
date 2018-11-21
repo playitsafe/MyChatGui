@@ -1,0 +1,282 @@
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import java.awt.CardLayout;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.UIManager;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JTextArea;
+
+public class MyChatWindow extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField txtUsername;
+	private JTextField txtServerip;
+	private JTextField txtPort;
+	private JButton btnConnectMeTo;
+	private JTextField txtEnterPrivateroomPasscode;
+	private JTextField txtEnterPasscode;
+	private JTextField txtMaxMember;
+	private JTextField txtDeleteCode;
+	private JButton btnJoinPublicRoom;
+	private JButton btnJoinPrivateRoom;
+	private JButton btnCreatePrivateRoom;
+	private JButton btnDeletePrivateRoom;
+	private JPanel optionPanel;
+	private JPanel chatPanel;
+	private JLabel lblWelcomeXxxYou;
+	private JButton btnLeaveChatroom;
+	private JTextArea txtrChatMessages;
+	private JTextArea txtrInputmessage;
+	private JButton btnSend;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MyChatWindow frame = new MyChatWindow();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public MyChatWindow() {
+		
+		setTitle("MyChat");
+		initComponets();
+		createEvents();	
+		
+	}
+
+	private void initComponets() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 620, 440);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(new CardLayout(0, 0));
+		
+		optionPanel = new JPanel();
+		contentPane.add(optionPanel, "name_53529996944445");
+		
+		JLabel lblSpecifyYourName = new JLabel("Specify Your Name and Sever Info to Get Connected First");
+		
+		txtUsername = new JTextField();
+		txtUsername.setText("Username");
+		txtUsername.setColumns(10);
+		
+		txtServerip = new JTextField();
+		txtServerip.setText("ServerIP");
+		txtServerip.setColumns(10);
+		
+		txtPort = new JTextField();
+		txtPort.setText("Port");
+		txtPort.setColumns(10);
+		
+		btnConnectMeTo = new JButton("Connect Me to Server!");
+		
+		
+		JLabel lblOptions = new JLabel("Options:");
+		
+		btnJoinPublicRoom = new JButton("Join Public Room");
+		
+		btnJoinPublicRoom.setEnabled(false);
+		
+		txtEnterPrivateroomPasscode = new JTextField();
+		txtEnterPrivateroomPasscode.setText("Enter PrivateRoom Passcode...");
+		txtEnterPrivateroomPasscode.setColumns(10);
+		
+		btnJoinPrivateRoom = new JButton("Join Private Room");
+		
+		btnJoinPrivateRoom.setEnabled(false);
+		
+		txtEnterPasscode = new JTextField();
+		txtEnterPasscode.setText("Enter PassCode");
+		txtEnterPasscode.setColumns(10);
+		
+		txtMaxMember = new JTextField();
+		txtMaxMember.setText("Max member");
+		txtMaxMember.setColumns(10);
+		
+		btnCreatePrivateRoom = new JButton("Create Private Room");
+		btnCreatePrivateRoom.setEnabled(false);
+		
+		btnDeletePrivateRoom = new JButton("Delete Private Room");
+		btnDeletePrivateRoom.setEnabled(false);
+		
+		txtDeleteCode = new JTextField();
+		txtDeleteCode.setText("Enter PrivateRoom Passcode...");
+		txtDeleteCode.setColumns(10);
+		GroupLayout gl_optionPanel = new GroupLayout(optionPanel);
+		gl_optionPanel.setHorizontalGroup(
+			gl_optionPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_optionPanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblSpecifyYourName, GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE)
+					.addGap(173))
+				.addGroup(gl_optionPanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblOptions, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGap(542))
+				.addGroup(gl_optionPanel.createSequentialGroup()
+					.addGap(62)
+					.addGroup(gl_optionPanel.createParallelGroup(Alignment.TRAILING)
+						.addComponent(btnJoinPublicRoom, GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
+						.addComponent(btnConnectMeTo, GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
+						.addGroup(gl_optionPanel.createSequentialGroup()
+							.addComponent(txtUsername, GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+							.addGap(18)
+							.addComponent(txtServerip, GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+							.addGap(18)
+							.addComponent(txtPort))
+						.addGroup(gl_optionPanel.createSequentialGroup()
+							.addGroup(gl_optionPanel.createParallelGroup(Alignment.TRAILING)
+								.addComponent(txtDeleteCode, GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
+								.addGroup(gl_optionPanel.createParallelGroup(Alignment.LEADING)
+									.addGroup(gl_optionPanel.createSequentialGroup()
+										.addComponent(txtEnterPasscode)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(txtMaxMember, GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE))
+									.addComponent(txtEnterPrivateroomPasscode, GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)))
+							.addGap(18)
+							.addGroup(gl_optionPanel.createParallelGroup(Alignment.LEADING)
+								.addComponent(btnCreatePrivateRoom, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnJoinPrivateRoom, GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+								.addComponent(btnDeletePrivateRoom, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+					.addGap(113))
+		);
+		gl_optionPanel.setVerticalGroup(
+			gl_optionPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_optionPanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblSpecifyYourName, GroupLayout.DEFAULT_SIZE, 18, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_optionPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(txtServerip, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(txtPort, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addComponent(btnConnectMeTo, GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(lblOptions)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnJoinPublicRoom)
+					.addGap(18)
+					.addGroup(gl_optionPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(txtEnterPrivateroomPasscode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnJoinPrivateRoom))
+					.addGap(18)
+					.addGroup(gl_optionPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(txtEnterPasscode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(txtMaxMember, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnCreatePrivateRoom))
+					.addGap(18)
+					.addGroup(gl_optionPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnDeletePrivateRoom, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(txtDeleteCode))
+					.addGap(73))
+		);
+		optionPanel.setLayout(gl_optionPanel);
+		
+		chatPanel = new JPanel();
+		contentPane.add(chatPanel, "name_53538330000359");
+		
+		lblWelcomeXxxYou = new JLabel("Welcome, XXX. You are now in Public Chat Room");
+		
+		btnLeaveChatroom = new JButton("Leave ChatRoom");
+		
+		txtrChatMessages = new JTextArea();
+		txtrChatMessages.setText("Chat Messages");
+		
+		txtrInputmessage = new JTextArea();
+		txtrInputmessage.setText("InputMessage");
+		
+		btnSend = new JButton("Send");
+		GroupLayout gl_chatPanel = new GroupLayout(chatPanel);
+		gl_chatPanel.setHorizontalGroup(
+			gl_chatPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_chatPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_chatPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_chatPanel.createSequentialGroup()
+							.addComponent(lblWelcomeXxxYou, GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+							.addGap(188)
+							.addComponent(btnLeaveChatroom, GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
+							.addGap(7))
+						.addGroup(gl_chatPanel.createSequentialGroup()
+							.addComponent(txtrChatMessages, GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
+							.addGap(8))
+						.addGroup(gl_chatPanel.createSequentialGroup()
+							.addComponent(txtrInputmessage, GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnSend, GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
+							.addContainerGap())))
+		);
+		gl_chatPanel.setVerticalGroup(
+			gl_chatPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_chatPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_chatPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnLeaveChatroom, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(lblWelcomeXxxYou, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(txtrChatMessages, GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_chatPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(txtrInputmessage, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+						.addComponent(btnSend, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		chatPanel.setLayout(gl_chatPanel);
+		
+	}
+
+	private void createEvents() {
+		
+		btnConnectMeTo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				btnJoinPublicRoom.setEnabled(true);
+				btnJoinPrivateRoom.setEnabled(true);
+				btnCreatePrivateRoom.setEnabled(true);
+				btnDeletePrivateRoom.setEnabled(true);
+				btnConnectMeTo.setEnabled(false);
+			}
+		});
+		
+		btnJoinPublicRoom.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				optionPanel.setVisible(false);
+				chatPanel.setVisible(true);
+			}
+		});
+		
+		btnJoinPrivateRoom.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+	}
+}
