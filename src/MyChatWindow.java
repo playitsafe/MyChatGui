@@ -1,6 +1,5 @@
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -8,16 +7,32 @@ import java.awt.CardLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.UIManager;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 
 public class MyChatWindow extends JFrame {
+	
+	//chatroom properties
+	public static String clientName;
+    public static byte[] serverAddress;
+    public static int serverPort;
+    static Thread ClientRead;
+    static Thread ClientWrite;
+    static Socket clientSocket;
 
+    //JFrame components
 	private JPanel contentPane;
 	private JTextField txtUsername;
 	private JTextField txtServerip;
@@ -60,15 +75,14 @@ public class MyChatWindow extends JFrame {
 		});
 	}
 
-	/**
+	/*
 	 * Create the frame.
 	 */
 	public MyChatWindow() {
 		
 		setTitle("MyChat");
 		initComponets();
-		createEvents();	
-		
+		createEvents();			
 	}
 
 	private void initComponets() {
@@ -208,6 +222,7 @@ public class MyChatWindow extends JFrame {
 		
 		btnLeaveChatroom = new JButton("Leave ChatRoom");
 		
+		
 		txtrChatMessages = new JTextArea();
 		txtrChatMessages.setText("Chat Messages");
 		
@@ -258,11 +273,104 @@ public class MyChatWindow extends JFrame {
 		
 		btnConnectMeTo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				
+				String cName = txtUsername.getText();
+		        String cServerIP = txtServerip.getText();
+		        String port = txtPort.getText();
+		       
+		      //Check and get entered info
+		        if (cName.equals("")||cServerIP.equals("")||port.equals("")) {
+		        	JOptionPane.showMessageDialog(null, "You must fill all blanks above!");
+		        	//System.exit(0);
+				} else {
+					try {
+						
+						String pattern = "[a-zA-Z]+[a-zA-Z]*+[0-9]*";
+						
+						if (cName.matches(pattern)) {
+							
+							//Valid Client name, assign it to variable
+	                        clientName=cName;
+	                        
+	                        //Now check Server IP Address format
+	                        pattern="^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+	                        if (cServerIP.matches(pattern)) {
+	                        	//Valid IP address format, assign it to variable
+	                            String a[]=cServerIP.split("\\.");
+	                            serverAddress=new byte[a.length];
+	                            
+	                            for(int i=0;i<a.length;i++)
+	                                serverAddress[i]=(byte) Integer.parseInt(a[i]);
+	                            
+	                          //Now check server port
+	                            pattern="[0-9]+[0-9]*";
+	                            if(port.matches(pattern)) {
+	                                //Valid port format, assign it to variable
+	                                serverPort=Integer.parseInt(port);
+	                            }else{
+	                            	JOptionPane.showMessageDialog(null, "WRONG PORT FORMAT - PortNumber");
+	                                //System.exit(0);
+	                            }
+	                            
+							}else{
+                            	JOptionPane.showMessageDialog(null, "WRONG IP ADDRESS WORNG - ChatServerIP");
+                                //System.exit(0);
+                            }
+						} else {
+							JOptionPane.showMessageDialog(null, "INVAILD NAME FORMAT - ClientName");
+							//System.exit(0);
+						}
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(null, "NUMBER/TYPE OF CONTENT IS NOT CORRECT");
+						//System.exit(0);
+					}
+				}
+		        
+		        
+	            try {
+	            	// Open connection to a server, at port specified port
+					clientSocket = new Socket(InetAddress.getByAddress(serverAddress),serverPort);
+					
+					// run client read thread
+		            ClientRead =new ClientRead(clientSocket);
+		            ClientRead.start();
+		            // run client write thread
+		            ClientWrite =new ClientWrite(clientSocket,clientName);
+		            ClientWrite.start();
+		            
+				} catch (SocketException ex1) {
+					
+					//Connection Refused
+		            if(clientSocket==null)
+		            	JOptionPane.showMessageDialog(null, "CONNECTION REFUSED - Check Server IP Address and Port then try again");
+		            else
+		            {
+		            	JOptionPane.showMessageDialog(null, "ERROR");
+		                terminateClientConecction();
+		            }
+		            
+		            
+				} catch(Exception ex2){
+		            if(clientSocket==null)
+		            	JOptionPane.showMessageDialog(null, "ERROR");
+		            else
+		            {
+		            	JOptionPane.showMessageDialog(null, "ERROR");
+		                terminateClientConecction();
+		            }
+
+		        }
+
+	            
+		        
+		        //JOptionPane.showMessageDialog(null, txtUsername.getText());
+				/*
 				btnJoinPublicRoom.setEnabled(true);
 				btnJoinPrivateRoom.setEnabled(true);
 				btnCreatePrivateRoom.setEnabled(true);
 				btnDeletePrivateRoom.setEnabled(true);
 				btnConnectMeTo.setEnabled(false);
+				*/
 			}
 		});
 		
@@ -278,5 +386,28 @@ public class MyChatWindow extends JFrame {
 				
 			}
 		});
+		
+		btnLeaveChatroom.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				optionPanel.setVisible(true);
+				chatPanel.setVisible(false);
+			}
+		});
 	}
+	
+	public static void terminateClientConecction()
+    {
+        try {
+            ClientRead.interrupt();
+            ClientWrite.interrupt();
+            clientSocket.close();
+            System.exit(0);
+        } catch (IOException ex) {
+            Logger.getLogger(MyChatClient.class.getName()).log(Level.SEVERE, null, ex);
+        }catch (SecurityException ex2)
+        {
+            Logger.getLogger(MyChatClient.class.getName()).log(Level.SEVERE, null, ex2);
+        }
+
+    }
 }
