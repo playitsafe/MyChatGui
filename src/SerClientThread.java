@@ -326,22 +326,24 @@ public class SerClientThread extends Thread{
         while(true)
        {
            //Read client name and check if it is exist or not
-                clientName=readClientName();
-                if(!MyChatServer.checkClientName(clientName))
-                    break;
-                else
+        	clientName=readClientName();
+            if(!MyChatServer.checkClientName(clientName))
+                break;
+            else
+            {
+                try
                 {
-                    try
-                    {
-                        OutputStream sout = s1.getOutputStream();
-                        DataOutputStream dos = new DataOutputStream(sout);
-                        dos.writeUTF("THE ENTERED NAME("+clientName+ ") IS ALREADY USED, PLEASE ENTER ANOTHER NAME");
-                    }catch(IOException ex)
-                    {
+                    OutputStream sout = s1.getOutputStream();
+                    DataOutputStream dos = new DataOutputStream(sout);
+                    //dos.writeUTF("THE ENTERED NAME("+clientName+ ") ISS ALREADY USED, PLEASE ENTER ANOTHER NAME");
+                    dos.writeUTF("1");
+                    
+                }catch(IOException ex)
+                {
 
-                    }
                 }
-            }
+            }     
+       }
 
        
             System.out.println("Server connected to "+ clientName + " on port " + s1.getPort());
@@ -352,7 +354,14 @@ public class SerClientThread extends Thread{
             //Add client to clients infomration queue
             MyChatServer.addClientsInfo(cInfor);
    }
+   /*
+   public static String checkAndSetClientName1() {
+	   String msg = "test!!!";
+	   return msg;
+   }
+   */
 
+   //ask user to input new name if it's in use
    public String readClientName()
     {
         String name="";

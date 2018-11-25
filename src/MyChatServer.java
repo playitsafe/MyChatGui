@@ -25,12 +25,6 @@ public class MyChatServer {
 
     public static void main(String args[]) throws IOException
     {
-        /*
-        //For test
-        args=new String[1];
-        args[0]="12345";
-        */
-
         //Check the entered argument 
         int port = 0;
         if(args.length==1)
@@ -70,7 +64,8 @@ public class MyChatServer {
         {
             //Accept client connection
             Socket ClientSocket=server.accept(); // Wait and accept a connection
-            new SerClientThread(ClientSocket).start();
+            SerClientThread serClientThread = new SerClientThread(ClientSocket);
+            serClientThread.start();
         }
     }
     

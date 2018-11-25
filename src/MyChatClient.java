@@ -33,7 +33,6 @@ public class MyChatClient {
         client.runClientApp(args);
     }
     
-    //private void runClientApp(String[] args, long starttime)
     private void runClientApp(String[] args)
     {
         try

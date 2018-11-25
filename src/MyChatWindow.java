@@ -13,6 +13,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.UIManager;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -103,11 +104,11 @@ public class MyChatWindow extends JFrame {
 		txtUsername.setColumns(10);
 		
 		txtServerip = new JTextField();
-		txtServerip.setText("ServerIP");
+		txtServerip.setText("127.0.0.1");
 		txtServerip.setColumns(10);
 		
 		txtPort = new JTextField();
-		txtPort.setText("Port");
+		txtPort.setText("12345");
 		txtPort.setColumns(10);
 		
 		btnConnectMeTo = new JButton("Connect Me to Server!");
@@ -307,6 +308,59 @@ public class MyChatWindow extends JFrame {
 	                            if(port.matches(pattern)) {
 	                                //Valid port format, assign it to variable
 	                                serverPort=Integer.parseInt(port);
+	                                
+	                                ////////////if the server info is right////////////
+	    	                        	
+	                                
+	                                try {
+	                	            	// Open connection to a server, at port specified port
+	                					clientSocket = new Socket(InetAddress.getByAddress(serverAddress),serverPort);
+	                					
+	                					// run client read thread
+	                		            ClientRead = new ClientRead(clientSocket);
+	                		            ClientRead.start();
+	                		            // run client write thread
+	                		            ClientWrite =new ClientWrite(clientSocket,clientName);
+	                		            ClientWrite.start();
+	                		            
+	                		            //ClientRead cRead = new ClientRead(s1);
+	                		            //s1In = clientSocket.getInputStream();
+	                		            //DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
+	                		            //String st = new String (dis.readUTF());		
+	                		            
+	                		            //JOptionPane.showMessageDialog(null, "how to check the name");
+	                		            
+	                		            //enable the option buttons below
+	                		            btnConnectMeTo.setEnabled(false);
+		    	                        btnJoinPublicRoom.setEnabled(true);
+		    	                    	btnJoinPrivateRoom.setEnabled(true);
+		    	                    	btnCreatePrivateRoom.setEnabled(true);
+		    	                    	btnDeletePrivateRoom.setEnabled(true);
+	                		            
+	                				} catch (SocketException ex1) {
+	                					
+	                					//Connection Refused
+	                		            if(clientSocket==null)
+	                		            	JOptionPane.showMessageDialog(null, "CONNECTION REFUSED - Check Server IP Address and Port then try again");
+	                		            else
+	                		            {
+	                		            	JOptionPane.showMessageDialog(null, "ERROR");
+	                		                terminateClientConecction();
+	                		            }
+	                		            
+	                		            
+	                				} catch(Exception ex2){
+	                		            if(clientSocket==null)
+	                		            	JOptionPane.showMessageDialog(null, "ERROR");
+	                		            else
+	                		            {
+	                		            	JOptionPane.showMessageDialog(null, "ERROR");
+	                		                terminateClientConecction();
+	                		            }
+
+	                		        }
+	    	                        
+	                                
 	                            }else{
 	                            	JOptionPane.showMessageDialog(null, "WRONG PORT FORMAT - PortNumber");
 	                                //System.exit(0);
@@ -316,53 +370,18 @@ public class MyChatWindow extends JFrame {
                             	JOptionPane.showMessageDialog(null, "WRONG IP ADDRESS WORNG - ChatServerIP");
                                 //System.exit(0);
                             }
+	                        
 						} else {
 							JOptionPane.showMessageDialog(null, "INVAILD NAME FORMAT - ClientName");
 							//System.exit(0);
-						}
+						} 
 					} catch (Exception e) {
 						JOptionPane.showMessageDialog(null, "NUMBER/TYPE OF CONTENT IS NOT CORRECT");
 						//System.exit(0);
 					}
 				}
 		        
-		        
-	            try {
-	            	// Open connection to a server, at port specified port
-					clientSocket = new Socket(InetAddress.getByAddress(serverAddress),serverPort);
-					
-					// run client read thread
-		            ClientRead =new ClientRead(clientSocket);
-		            ClientRead.start();
-		            // run client write thread
-		            ClientWrite =new ClientWrite(clientSocket,clientName);
-		            ClientWrite.start();
-		            
-				} catch (SocketException ex1) {
-					
-					//Connection Refused
-		            if(clientSocket==null)
-		            	JOptionPane.showMessageDialog(null, "CONNECTION REFUSED - Check Server IP Address and Port then try again");
-		            else
-		            {
-		            	JOptionPane.showMessageDialog(null, "ERROR");
-		                terminateClientConecction();
-		            }
-		            
-		            
-				} catch(Exception ex2){
-		            if(clientSocket==null)
-		            	JOptionPane.showMessageDialog(null, "ERROR");
-		            else
-		            {
-		            	JOptionPane.showMessageDialog(null, "ERROR");
-		                terminateClientConecction();
-		            }
-
-		        }
-
 	            
-		        
 		        //JOptionPane.showMessageDialog(null, txtUsername.getText());
 				/*
 				btnJoinPublicRoom.setEnabled(true);

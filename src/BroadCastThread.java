@@ -24,13 +24,13 @@ public synchronized void sendMessage()
 		wait();
 	}
         System.out.println("Got a public message");
-        ClientMessInfo mess=MyChatServer.removePublicMessage();
+        ClientMessInfo mess = MyChatServer.removePublicMessage();
         
         //for(Socket clsocket:Server.clients)
         for(Socket clsocket:MyChatServer.PublicRoom)
         {
             s1out = clsocket.getOutputStream();
-	    DataOutputStream dos = new DataOutputStream (s1out);
+	        DataOutputStream dos = new DataOutputStream (s1out);
 	        //if mess from other port
 	        if(clsocket.getPort()!=mess.getSc().getPort())
 	           dos.writeUTF(mess.getSenderName()+": "+mess.getMessage());
