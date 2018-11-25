@@ -9,7 +9,7 @@
  *
  * @author Mutaz Barika
  */
-
+//ClientWrite thread to write data to allow others read it 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -37,7 +37,9 @@ public class ClientWrite extends Thread {
   {
       OutputStream s1out = null;
       DataOutputStream dos= null;
-	  try {
+      
+	  try
+	  {
 		  
            // Get an input file handle from the socket and read the input
            s1out = s1.getOutputStream();
@@ -52,7 +54,10 @@ public class ClientWrite extends Thread {
               String message = in.readLine();
               dos.writeUTF(message);
 	       }
-	  } catch (IOException e) {
+	       
+	    } 
+	  catch (IOException e) 
+	  {
 
                 // TODO Auto-generated catch block
                 //e.printStackTrace();

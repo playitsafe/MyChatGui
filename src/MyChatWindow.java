@@ -272,6 +272,7 @@ public class MyChatWindow extends JFrame {
 
 	private void createEvents() {
 		
+		//////////////When <<connect me>> button is clicked/////////////////////
 		btnConnectMeTo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
@@ -331,7 +332,7 @@ public class MyChatWindow extends JFrame {
 	                		            //JOptionPane.showMessageDialog(null, "how to check the name");
 	                		            
 	                		            //enable the option buttons below
-	                		            btnConnectMeTo.setEnabled(false);
+	                		            //btnConnectMeTo.setEnabled(false);
 		    	                        btnJoinPublicRoom.setEnabled(true);
 		    	                    	btnJoinPrivateRoom.setEnabled(true);
 		    	                    	btnCreatePrivateRoom.setEnabled(true);
@@ -417,7 +418,7 @@ public class MyChatWindow extends JFrame {
 	public static void terminateClientConecction()
     {
         try {
-            ClientRead.interrupt();
+        	ClientRead.interrupt();
             ClientWrite.interrupt();
             clientSocket.close();
             System.exit(0);
@@ -429,4 +430,8 @@ public class MyChatWindow extends JFrame {
         }
 
     }
+	
+	public static void testPop(String s) {
+		JOptionPane.showMessageDialog(null, s);
+	}
 }

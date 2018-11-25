@@ -336,7 +336,8 @@ public class SerClientThread extends Thread{
                     OutputStream sout = s1.getOutputStream();
                     DataOutputStream dos = new DataOutputStream(sout);
                     //dos.writeUTF("THE ENTERED NAME("+clientName+ ") ISS ALREADY USED, PLEASE ENTER ANOTHER NAME");
-                    dos.writeUTF("1");
+                    MyChatWindow.testPop("THE ENTERED NAME("+clientName+ ") ISS ALREADY USED, PLEASE ENTER ANOTHER NAME");
+                    
                     
                 }catch(IOException ex)
                 {

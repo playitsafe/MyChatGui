@@ -77,6 +77,7 @@ public class MyChatServer {
         {
             if(clientsInfo.get(i).getcName().toUpperCase().equals(name.toUpperCase()))
             {
+            	//if name existed,returns true
                 check=true;
                 break;
             }

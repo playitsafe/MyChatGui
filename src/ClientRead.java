@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
  *
  * @author Mutaz Barika
  */
-
+//ClientRead thread to read data written by others
 public class ClientRead extends Thread {
    Socket s1;
 
@@ -18,6 +18,7 @@ public class ClientRead extends Thread {
 	super();
 	this.s1 = s1;
   }
+  
   public void run()
   {
       InputStream s1In=null;
@@ -36,7 +37,15 @@ public class ClientRead extends Thread {
                     break;
                 }
                 else
-                    System.out.println(st);
+                {
+                	////////////////////////////////////////////////////
+                	System.out.println(st);
+                	//String ss = new String(System.out.println("haha"));
+                	//System.out.println("haha");
+                	MyChatWindow.testPop(st);
+                }
+                    
+                
                 //dis.close();
 	         }
 	  } catch (IOException e) {
@@ -44,7 +53,8 @@ public class ClientRead extends Thread {
                 // TODO Auto-generated catch block
                 //e.printStackTrace();
                   //System.out.println("SERVER IS SHUTDOWN");
-                  MyChatClient.terminateClientConecction();
+                  //MyChatClient.terminateClientConecction();
+            	  MyChatWindow.terminateClientConecction();
                 //s1In.close();
                 //dis.close();
                 //s1.close();
