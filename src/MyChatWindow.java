@@ -1,5 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Frame;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -13,15 +15,20 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.UIManager;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.Console;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class MyChatWindow extends JFrame {
 	
@@ -54,6 +61,7 @@ public class MyChatWindow extends JFrame {
 	private JTextArea txtrChatMessages;
 	private JTextArea txtrInputmessage;
 	private JButton btnSend;
+	private JComboBox comboBox;
 
 	/**
 	 * Launch the application.
@@ -118,47 +126,71 @@ public class MyChatWindow extends JFrame {
 		
 		btnJoinPublicRoom = new JButton("Join Public Room");
 		
-		btnJoinPublicRoom.setEnabled(false);
+		btnJoinPublicRoom.setVisible(false);
 		
 		txtEnterPrivateroomPasscode = new JTextField();
 		txtEnterPrivateroomPasscode.setText("Enter PrivateRoom Passcode...");
 		txtEnterPrivateroomPasscode.setColumns(10);
+		txtEnterPrivateroomPasscode.setVisible(false);
 		
 		btnJoinPrivateRoom = new JButton("Join Private Room");
 		
-		btnJoinPrivateRoom.setEnabled(false);
+		btnJoinPrivateRoom.setVisible(false);
 		
 		txtEnterPasscode = new JTextField();
 		txtEnterPasscode.setText("Enter PassCode");
 		txtEnterPasscode.setColumns(10);
+		txtEnterPasscode.setVisible(false);
 		
 		txtMaxMember = new JTextField();
 		txtMaxMember.setText("Max member");
 		txtMaxMember.setColumns(10);
+		txtMaxMember.setVisible(false);
 		
 		btnCreatePrivateRoom = new JButton("Create Private Room");
-		btnCreatePrivateRoom.setEnabled(false);
+		btnCreatePrivateRoom.setVisible(false);
 		
 		btnDeletePrivateRoom = new JButton("Delete Private Room");
-		btnDeletePrivateRoom.setEnabled(false);
+		btnDeletePrivateRoom.setVisible(false);
 		
 		txtDeleteCode = new JTextField();
-		txtDeleteCode.setText("Enter PrivateRoom Passcode...");
+		txtDeleteCode.setText("Enter Passcode to be deleted...");
 		txtDeleteCode.setColumns(10);
+		txtDeleteCode.setVisible(false);
+		
+		comboBox = new JComboBox();		
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Please select an option...", "Join Public Chat Room", "Join Private Chat Room", "Create Private Chat Room", "Delete Private Chat Room"}));
+		comboBox.setEnabled(false);
+		comboBox.setSelectedIndex(0);
 		GroupLayout gl_optionPanel = new GroupLayout(optionPanel);
 		gl_optionPanel.setHorizontalGroup(
-			gl_optionPanel.createParallelGroup(Alignment.LEADING)
+			gl_optionPanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_optionPanel.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblSpecifyYourName, GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE)
 					.addGap(173))
 				.addGroup(gl_optionPanel.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(lblOptions, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addGap(542))
+					.addComponent(lblOptions, GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+					.addGap(12)
+					.addComponent(comboBox, 0, 415, Short.MAX_VALUE)
+					.addGap(115))
 				.addGroup(gl_optionPanel.createSequentialGroup()
 					.addGap(62)
 					.addGroup(gl_optionPanel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_optionPanel.createSequentialGroup()
+							.addGroup(gl_optionPanel.createParallelGroup(Alignment.TRAILING)
+								.addComponent(txtDeleteCode, GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+								.addGroup(gl_optionPanel.createSequentialGroup()
+									.addComponent(txtEnterPasscode, GroupLayout.PREFERRED_SIZE, 118, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(txtMaxMember, GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE))
+								.addComponent(txtEnterPrivateroomPasscode, GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE))
+							.addGap(18)
+							.addGroup(gl_optionPanel.createParallelGroup(Alignment.LEADING)
+								.addComponent(btnCreatePrivateRoom, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnJoinPrivateRoom, GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+								.addComponent(btnDeletePrivateRoom, GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)))
 						.addComponent(btnJoinPublicRoom, GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
 						.addComponent(btnConnectMeTo, GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
 						.addGroup(gl_optionPanel.createSequentialGroup()
@@ -166,53 +198,41 @@ public class MyChatWindow extends JFrame {
 							.addGap(18)
 							.addComponent(txtServerip, GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
 							.addGap(18)
-							.addComponent(txtPort))
-						.addGroup(gl_optionPanel.createSequentialGroup()
-							.addGroup(gl_optionPanel.createParallelGroup(Alignment.TRAILING)
-								.addComponent(txtDeleteCode, GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
-								.addGroup(gl_optionPanel.createParallelGroup(Alignment.LEADING)
-									.addGroup(gl_optionPanel.createSequentialGroup()
-										.addComponent(txtEnterPasscode)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(txtMaxMember, GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE))
-									.addComponent(txtEnterPrivateroomPasscode, GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)))
-							.addGap(18)
-							.addGroup(gl_optionPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(btnCreatePrivateRoom, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(btnJoinPrivateRoom, GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
-								.addComponent(btnDeletePrivateRoom, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+							.addComponent(txtPort)))
 					.addGap(113))
 		);
 		gl_optionPanel.setVerticalGroup(
 			gl_optionPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_optionPanel.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(lblSpecifyYourName, GroupLayout.DEFAULT_SIZE, 18, Short.MAX_VALUE)
+					.addComponent(lblSpecifyYourName, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_optionPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(txtServerip, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(txtPort, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
-					.addComponent(btnConnectMeTo, GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+					.addComponent(btnConnectMeTo, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addGroup(gl_optionPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblOptions))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(lblOptions)
-					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnJoinPublicRoom)
+					.addGap(26)
+					.addGroup(gl_optionPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnJoinPrivateRoom)
+						.addComponent(txtEnterPrivateroomPasscode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(gl_optionPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(txtEnterPrivateroomPasscode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnJoinPrivateRoom))
-					.addGap(18)
-					.addGroup(gl_optionPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(txtEnterPasscode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(txtMaxMember, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnCreatePrivateRoom))
+						.addComponent(btnCreatePrivateRoom)
+						.addComponent(txtEnterPasscode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
-					.addGroup(gl_optionPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnDeletePrivateRoom, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(txtDeleteCode))
-					.addGap(73))
+					.addGroup(gl_optionPanel.createParallelGroup(Alignment.BASELINE, false)
+						.addComponent(btnDeletePrivateRoom)
+						.addComponent(txtDeleteCode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(37))
 		);
 		optionPanel.setLayout(gl_optionPanel);
 		
@@ -311,7 +331,6 @@ public class MyChatWindow extends JFrame {
 	                                serverPort=Integer.parseInt(port);
 	                                
 	                                ////////////if the server info is right////////////
-	    	                        	
 	                                
 	                                try {
 	                	            	// Open connection to a server, at port specified port
@@ -324,19 +343,18 @@ public class MyChatWindow extends JFrame {
 	                		            ClientWrite =new ClientWrite(clientSocket,clientName);
 	                		            ClientWrite.start();
 	                		            
-	                		            //ClientRead cRead = new ClientRead(s1);
-	                		            //s1In = clientSocket.getInputStream();
-	                		            //DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
-	                		            //String st = new String (dis.readUTF());		
+	                		            /*
+	                		            DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
+	                		            String st = new String (dis.readUTF());
 	                		            
-	                		            //JOptionPane.showMessageDialog(null, "how to check the name");
+	                		            if (st.startsWith("Welcome")) {
+	                		            	JOptionPane.showMessageDialog(null, "yes");
+										} else {
+											JOptionPane.showMessageDialog(null, "nooooo");
+										}
+										*/
 	                		            
-	                		            //enable the option buttons below
-	                		            //btnConnectMeTo.setEnabled(false);
-		    	                        btnJoinPublicRoom.setEnabled(true);
-		    	                    	btnJoinPrivateRoom.setEnabled(true);
-		    	                    	btnCreatePrivateRoom.setEnabled(true);
-		    	                    	btnDeletePrivateRoom.setEnabled(true);
+	                		            comboBox.setEnabled(true);
 	                		            
 	                				} catch (SocketException ex1) {
 	                					
@@ -349,7 +367,6 @@ public class MyChatWindow extends JFrame {
 	                		                terminateClientConecction();
 	                		            }
 	                		            
-	                		            
 	                				} catch(Exception ex2){
 	                		            if(clientSocket==null)
 	                		            	JOptionPane.showMessageDialog(null, "ERROR");
@@ -358,10 +375,8 @@ public class MyChatWindow extends JFrame {
 	                		            	JOptionPane.showMessageDialog(null, "ERROR");
 	                		                terminateClientConecction();
 	                		            }
-
 	                		        }
 	    	                        
-	                                
 	                            }else{
 	                            	JOptionPane.showMessageDialog(null, "WRONG PORT FORMAT - PortNumber");
 	                                //System.exit(0);
@@ -380,17 +395,90 @@ public class MyChatWindow extends JFrame {
 						JOptionPane.showMessageDialog(null, "NUMBER/TYPE OF CONTENT IS NOT CORRECT");
 						//System.exit(0);
 					}
+				}		        
+			}
+		});
+		
+		comboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int selectedIndex = comboBox.getSelectedIndex();
+				switch (selectedIndex) {
+				case 0:
+					btnJoinPublicRoom.setVisible(false);
+					
+					txtEnterPrivateroomPasscode.setVisible(false);
+					btnJoinPrivateRoom.setVisible(false);
+					
+					txtEnterPasscode.setVisible(false);
+					txtMaxMember.setVisible(false);
+					btnCreatePrivateRoom.setVisible(false);
+					
+					txtDeleteCode.setVisible(false);
+					btnDeletePrivateRoom.setVisible(false);
+					
+					break;
+				case 1:
+					btnJoinPublicRoom.setVisible(true);
+					
+					txtEnterPrivateroomPasscode.setVisible(false);
+					btnJoinPrivateRoom.setVisible(false);
+					
+					txtEnterPasscode.setVisible(false);
+					txtMaxMember.setVisible(false);
+					btnCreatePrivateRoom.setVisible(false);
+					
+					txtDeleteCode.setVisible(false);
+					btnDeletePrivateRoom.setVisible(false);
+					
+					break;
+				
+				case 2:
+					btnJoinPublicRoom.setVisible(false);
+					
+					txtEnterPrivateroomPasscode.setVisible(true);
+					btnJoinPrivateRoom.setVisible(true);
+					
+					txtEnterPasscode.setVisible(false);
+					txtMaxMember.setVisible(false);
+					btnCreatePrivateRoom.setVisible(false);
+					
+					txtDeleteCode.setVisible(false);
+					btnDeletePrivateRoom.setVisible(false);
+					
+					break;
+					
+				case 3:
+					btnJoinPublicRoom.setVisible(false);
+					
+					txtEnterPrivateroomPasscode.setVisible(false);
+					btnJoinPrivateRoom.setVisible(false);
+					
+					txtEnterPasscode.setVisible(true);
+					txtMaxMember.setVisible(true);
+					btnCreatePrivateRoom.setVisible(true);
+					
+					txtDeleteCode.setVisible(false);
+					btnDeletePrivateRoom.setVisible(false);
+					
+					break;
+					
+				case 4:
+					btnJoinPublicRoom.setVisible(false);
+					
+					txtEnterPrivateroomPasscode.setVisible(false);
+					btnJoinPrivateRoom.setVisible(false);
+					
+					txtEnterPasscode.setVisible(false);
+					txtMaxMember.setVisible(false);
+					btnCreatePrivateRoom.setVisible(false);
+					
+					txtDeleteCode.setVisible(true);
+					btnDeletePrivateRoom.setVisible(true);
+					
+					break;
+				default:
+					break;
 				}
-		        
-	            
-		        //JOptionPane.showMessageDialog(null, txtUsername.getText());
-				/*
-				btnJoinPublicRoom.setEnabled(true);
-				btnJoinPrivateRoom.setEnabled(true);
-				btnCreatePrivateRoom.setEnabled(true);
-				btnDeletePrivateRoom.setEnabled(true);
-				btnConnectMeTo.setEnabled(false);
-				*/
 			}
 		});
 		
@@ -398,6 +486,42 @@ public class MyChatWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				optionPanel.setVisible(false);
 				chatPanel.setVisible(true);
+				
+				try {
+					DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
+					dos.writeUTF("JPUB");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				/*
+				String cServerIP = txtServerip.getText();
+		        String port = txtPort.getText();
+		        String a[]=cServerIP.split("\\.");
+                serverAddress=new byte[a.length];
+                
+                for(int i=0;i<a.length;i++)
+                    serverAddress[i]=(byte) Integer.parseInt(a[i]);
+                
+                serverPort=Integer.parseInt(port);
+				
+				try {
+					clientSocket = new Socket(InetAddress.getByAddress(serverAddress),serverPort);
+				} catch (UnknownHostException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				MyChatServer.PublicRoom.add(clientSocket);
+				//Send message to all members notify them this client is joined the chat room
+                MyChatServer.addPublicMessage(new ClientMessInfo(clientSocket,"Control",clientName+" is joined"));
+                MyChatServer.bthread.startmessage();
+                */
+                
 			}
 		});
 		
@@ -431,7 +555,8 @@ public class MyChatWindow extends JFrame {
 
     }
 	
-	public static void testPop(String s) {
+	public static void popUpAlert(String s) {
 		JOptionPane.showMessageDialog(null, s);
+		
 	}
 }

@@ -13,10 +13,13 @@ import javax.swing.JOptionPane;
 //ClientRead thread to read data written by others
 public class ClientRead extends Thread {
    Socket s1;
+   Boolean isConnected = false;
 
   public ClientRead(Socket s1) {
 	super();
 	this.s1 = s1;
+	
+	//this.isConnected=false;
   }
   
   public void run()
@@ -29,7 +32,8 @@ public class ClientRead extends Thread {
              dis = new DataInputStream(s1In);
 	         while(true)
 	         { 
-                String st = new String (dis.readUTF());
+                String st = new String (dis.readUTF());                
+                
                 
                 if(st.toUpperCase().equals("SHUTDOWN"))
                 {
@@ -38,11 +42,13 @@ public class ClientRead extends Thread {
                 }
                 else
                 {
+                	
                 	////////////////////////////////////////////////////
                 	System.out.println(st);
-                	//String ss = new String(System.out.println("haha"));
-                	//System.out.println("haha");
-                	MyChatWindow.testPop(st);
+                	if (st.startsWith("Welcome")) {
+						isConnected=true;
+					}
+                	MyChatWindow.popUpAlert(st);
                 }
                     
                 
@@ -63,4 +69,6 @@ public class ClientRead extends Thread {
             }
 		}
   }
+  
+
 }

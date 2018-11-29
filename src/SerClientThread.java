@@ -9,6 +9,8 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.plaf.multi.MultiViewportUI;
+
 /**
  *
  * @author Mutaz Barika
@@ -49,8 +51,7 @@ public class SerClientThread extends Thread{
             int attempts=3;
             String option="";
             int fromClosedPrivateRoom=0;
-            dos.writeUTF("THE CHAT OPTIOS ARE:\n 1- Join Public Chat, enter JPUB \n 2- Join Private Chat Room, enter JPRIV <passcode> \n 3- Create Private Chat Room, enter Create <passcode> <MaxMember> \n 4- Delete Private Chat Room. enter Delete <passcode>");
-          
+            //dos.writeUTF("THE CHAT OPTIOS ARE:\n 1- Join Public Chat, enter JPUB \n 2- Join Private Chat Room, enter JPRIV <passcode> \n 3- Create Private Chat Room, enter Create <passcode> <MaxMember> \n 4- Delete Private Chat Room. enter Delete <passcode>");
             
             //for chat option
             while(true) 
@@ -59,10 +60,10 @@ public class SerClientThread extends Thread{
                     option= new String(dis.readUTF());
                 else if(fromClosedPrivateRoom==1)
                 {
-
                     fromClosedPrivateRoom=0;
                 }
 
+                
                 if(option.toUpperCase().equals("JPUB"))
                 {
                     dos.writeUTF("YOU ARE NOW IN PUBLIC CHAT ROOM");
@@ -324,36 +325,41 @@ public class SerClientThread extends Thread{
    {
        //Read and check if the entered name is unique name - not exist otherwise, ask client to enter new name
         while(true)
-       {
+        {
            //Read client name and check if it is exist or not
         	clientName=readClientName();
-            if(!MyChatServer.checkClientName(clientName))
-                break;
+            if(!MyChatServer.checkClientName(clientName)) {
+            	if (clientName!="") {            		
+            		System.out.println("Server connected to "+ clientName + " on port " + s1.getPort());
+            		
+				}            	
+            	break;
+            }
             else
             {
                 try
                 {
                     OutputStream sout = s1.getOutputStream();
                     DataOutputStream dos = new DataOutputStream(sout);
-                    //dos.writeUTF("THE ENTERED NAME("+clientName+ ") ISS ALREADY USED, PLEASE ENTER ANOTHER NAME");
-                    MyChatWindow.testPop("THE ENTERED NAME("+clientName+ ") ISS ALREADY USED, PLEASE ENTER ANOTHER NAME");
-                    
+                    dos.writeUTF("THE ENTERED NAME("+clientName+ ") IS ALREADY USED, PLEASE ENTER ANOTHER NAME");
+                    //MyChatWindow.popUpAlert("THE ENTERED NAME("+clientName+ ") ISS ALREADY USED, PLEASE ENTER ANOTHER NAME");
+                    //MyChatWindow.terminateClientConecction();                  
                     
                 }catch(IOException ex)
                 {
 
                 }
             }     
-       }
+        }
 
        
-            System.out.println("Server connected to "+ clientName + " on port " + s1.getPort());
+        //System.out.println("Server connected to "+ clientName + " on port " + s1.getPort());
 
-            //Create client infomration object
-            ClientInfo cInfor=new ClientInfo(clientName, s1);
+        //Create client infomration object
+        ClientInfo cInfor=new ClientInfo(clientName, s1);
 
-            //Add client to clients infomration queue
-            MyChatServer.addClientsInfo(cInfor);
+        //Add client to clients infomration queue
+        MyChatServer.addClientsInfo(cInfor);
    }
    /*
    public static String checkAndSetClientName1() {
