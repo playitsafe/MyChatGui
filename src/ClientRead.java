@@ -69,6 +69,10 @@ public class ClientRead extends Thread {
                     				optionComp[i].setEnabled(false);
                     				((JButton) optionComp[i]).setText("Connected!");
         						}
+                    			
+                    			if (optionComp[i].getName().equals("comboBox")) {
+                    				optionComp[i].setEnabled(true);
+								}
     						}
                     	}
 					}

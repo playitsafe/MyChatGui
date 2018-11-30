@@ -161,6 +161,7 @@ public class MyChatWindow extends JFrame {
 		txtDeleteCode.setVisible(false);
 		
 		comboBox = new JComboBox();		
+		comboBox.setName("comboBox");
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Please select an option...", "Join Public Chat Room", "Join Private Chat Room", "Create Private Chat Room", "Delete Private Chat Room"}));
 		comboBox.setEnabled(false);
 		comboBox.setSelectedIndex(0);
@@ -348,18 +349,7 @@ public class MyChatWindow extends JFrame {
 	                		            ClientWrite =new ClientWrite(clientSocket,clientName);
 	                		            ClientWrite.start();
 	                		            
-	                		            /*
-	                		            DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
-	                		            String st = new String (dis.readUTF());
-	                		            
-	                		            if (st.startsWith("Welcome")) {
-	                		            	JOptionPane.showMessageDialog(null, "yes");
-										} else {
-											JOptionPane.showMessageDialog(null, "nooooo");
-										}
-										*/
-	                		            
-	                		            comboBox.setEnabled(true);
+	                		            //comboBox.setEnabled(true);
 	                		            
 	                				} catch (SocketException ex1) {
 	                					
