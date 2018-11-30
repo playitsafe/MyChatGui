@@ -46,7 +46,7 @@ public class SerClientThread extends Thread{
             //Check and set client name from client console
             checkAndSetClientName();
 
-            dos.writeUTF("Welcome "+ clientName +" to the chat application");
+            dos.writeUTF("System: Welcome "+ clientName +" to the chat application");
             //Immediate Interaction after Connection
             int attempts=3;
             String option="";
@@ -281,8 +281,7 @@ public class SerClientThread extends Thread{
                     else
                     {
                         attempts--;
-                    }
-                    
+                    }                    
                 }
                 else if(option.toUpperCase().equals("SHUTDOWN"))
                 {
@@ -294,8 +293,7 @@ public class SerClientThread extends Thread{
                 else
                 {
                     attempts--;
-                    dos.writeUTF("WRONG OPTION(" + attempts + ")!! PLEASE SPECIFY OPTION AGAIN");
-                    
+                    dos.writeUTF("WRONG OPTION(" + attempts + ")!! PLEASE SPECIFY OPTION AGAIN");                    
                 }
 
                 if(attempts==0)

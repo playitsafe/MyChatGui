@@ -1,10 +1,18 @@
 
 
+import java.awt.Component;
+import java.awt.Container;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
+
+import javax.swing.AbstractButton;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -13,14 +21,22 @@ import javax.swing.JOptionPane;
 //ClientRead thread to read data written by others
 public class ClientRead extends Thread {
    Socket s1;
-   Boolean isConnected = false;
+   JPanel optionPanel;
+   JPanel chatPanel;
+   
 
   public ClientRead(Socket s1) {
 	super();
 	this.s1 = s1;
-	
-	//this.isConnected=false;
   }
+  
+  public ClientRead(Socket s1, JPanel optionPanel, JPanel chatPanel) {
+	super();
+	this.s1 = s1;
+	this.optionPanel = optionPanel;
+	this.chatPanel = chatPanel;
+  }
+  
   
   public void run()
   {
@@ -30,10 +46,12 @@ public class ClientRead extends Thread {
 		  
              s1In = s1.getInputStream();
              dis = new DataInputStream(s1In);
+             
 	         while(true)
 	         { 
                 String st = new String (dis.readUTF());                
-                
+                Component[] optionComp = optionPanel.getComponents();
+                Component[] chatComp = chatPanel.getComponents();
                 
                 if(st.toUpperCase().equals("SHUTDOWN"))
                 {
@@ -42,16 +60,25 @@ public class ClientRead extends Thread {
                 }
                 else
                 {
-                	
                 	////////////////////////////////////////////////////
                 	System.out.println(st);
-                	if (st.startsWith("Welcome")) {
-						isConnected=true;
+                	if (st.startsWith("System: Welcome")) {
+                		for (int i = 0; i < optionComp.length; i++) {
+                    		if (optionComp[i].getName()!=null) {
+                    			if (optionComp[i].getName().equals("btnConnectMeTo")) {
+                    				optionComp[i].setEnabled(false);
+                    				((JButton) optionComp[i]).setText("Connected!");
+        						}
+    						}
+                    	}
 					}
+                	
+                	                	                	
+                	
+                	
+                	
                 	MyChatWindow.popUpAlert(st);
-                }
-                    
-                
+                }                  
                 //dis.close();
 	         }
 	  } catch (IOException e) {
@@ -69,6 +96,5 @@ public class ClientRead extends Thread {
             }
 		}
   }
-  
 
 }

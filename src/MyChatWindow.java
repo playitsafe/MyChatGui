@@ -103,7 +103,8 @@ public class MyChatWindow extends JFrame {
 		contentPane.setLayout(new CardLayout(0, 0));
 		
 		optionPanel = new JPanel();
-		contentPane.add(optionPanel, "name_53529996944445");
+		contentPane.add(optionPanel, "optionPanel");
+		optionPanel.setName("optionPanel");
 		
 		JLabel lblSpecifyYourName = new JLabel("Specify Your Name and Sever Info to Get Connected First");
 		
@@ -120,6 +121,7 @@ public class MyChatWindow extends JFrame {
 		txtPort.setColumns(10);
 		
 		btnConnectMeTo = new JButton("Connect Me to Server!");
+		btnConnectMeTo.setName("btnConnectMeTo");
 		
 		
 		JLabel lblOptions = new JLabel("Options:");
@@ -237,8 +239,9 @@ public class MyChatWindow extends JFrame {
 		optionPanel.setLayout(gl_optionPanel);
 		
 		chatPanel = new JPanel();
-		contentPane.add(chatPanel, "name_53538330000359");
 		
+		contentPane.add(chatPanel, "chatPanel");
+		chatPanel.setName("chatPanel");		
 		lblWelcomeXxxYou = new JLabel("Welcome, XXX. You are now in Public Chat Room");
 		
 		btnLeaveChatroom = new JButton("Leave ChatRoom");
@@ -336,9 +339,11 @@ public class MyChatWindow extends JFrame {
 	                	            	// Open connection to a server, at port specified port
 	                					clientSocket = new Socket(InetAddress.getByAddress(serverAddress),serverPort);
 	                					
-	                					// run client read thread
-	                		            ClientRead = new ClientRead(clientSocket);
+	                					
+										// run client read thread
+	                		            ClientRead = new ClientRead(clientSocket, optionPanel, chatPanel);
 	                		            ClientRead.start();
+	                		        
 	                		            // run client write thread
 	                		            ClientWrite =new ClientWrite(clientSocket,clientName);
 	                		            ClientWrite.start();
@@ -365,8 +370,7 @@ public class MyChatWindow extends JFrame {
 	                		            {
 	                		            	JOptionPane.showMessageDialog(null, "ERROR");
 	                		                terminateClientConecction();
-	                		            }
-	                		            
+	                		            }	                		            
 	                				} catch(Exception ex2){
 	                		            if(clientSocket==null)
 	                		            	JOptionPane.showMessageDialog(null, "ERROR");
@@ -375,8 +379,7 @@ public class MyChatWindow extends JFrame {
 	                		            	JOptionPane.showMessageDialog(null, "ERROR");
 	                		                terminateClientConecction();
 	                		            }
-	                		        }
-	    	                        
+	                		        }	    	                        
 	                            }else{
 	                            	JOptionPane.showMessageDialog(null, "WRONG PORT FORMAT - PortNumber");
 	                                //System.exit(0);
