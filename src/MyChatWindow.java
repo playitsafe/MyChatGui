@@ -61,12 +61,13 @@ public class MyChatWindow extends JFrame {
 	private JPanel chatPanel;
 	private JLabel lblWelcomeHeader;
 	private JButton btnLeaveChatroom;
-	private JTextArea txtInputmessage;
 	private JButton btnSend;
 	private JComboBox comboBox;
 	private JTextArea chatArea;
 	private JScrollPane scrollPane;
 	private JViewport viewPort;
+	private JScrollPane inputScrollPane;
+	private JTextArea txtInputmessage;
 
 	/**
 	 * Launch the application.
@@ -252,29 +253,28 @@ public class MyChatWindow extends JFrame {
 		
 		btnLeaveChatroom = new JButton("Leave ChatRoom");
 		
-		txtInputmessage = new JTextArea();
-		txtInputmessage.setName("txtInputmessage");
-		
 		btnSend = new JButton("Send");		
 		
 		scrollPane = new JScrollPane();
+		
+		inputScrollPane = new JScrollPane();
 		GroupLayout gl_chatPanel = new GroupLayout(chatPanel);
 		gl_chatPanel.setHorizontalGroup(
 			gl_chatPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_chatPanel.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_chatPanel.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_chatPanel.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_chatPanel.createSequentialGroup()
-							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
+							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 582, Short.MAX_VALUE)
 							.addContainerGap())
 						.addGroup(gl_chatPanel.createSequentialGroup()
 							.addComponent(lblWelcomeHeader, GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
 							.addGap(188)
 							.addComponent(btnLeaveChatroom, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 							.addGap(7))
-						.addGroup(Alignment.TRAILING, gl_chatPanel.createSequentialGroup()
-							.addComponent(txtInputmessage, GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
-							.addGap(12)
+						.addGroup(Alignment.LEADING, gl_chatPanel.createSequentialGroup()
+							.addComponent(inputScrollPane, GroupLayout.PREFERRED_SIZE, 470, GroupLayout.PREFERRED_SIZE)
+							.addGap(10)
 							.addComponent(btnSend, GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
 							.addContainerGap())))
 		);
@@ -286,13 +286,20 @@ public class MyChatWindow extends JFrame {
 						.addComponent(btnLeaveChatroom, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(lblWelcomeHeader, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
 					.addGap(18)
 					.addGroup(gl_chatPanel.createParallelGroup(Alignment.TRAILING, false)
 						.addComponent(btnSend, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(txtInputmessage, GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE))
+						.addComponent(inputScrollPane, GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE))
 					.addGap(0))
 		);
+		
+		txtInputmessage = new JTextArea();
+		inputScrollPane.setViewportView(txtInputmessage);
+		JScrollBar inputVerticalBar = inputScrollPane.getVerticalScrollBar();
+		JScrollBar inputHorizontalBar = inputScrollPane.getHorizontalScrollBar();
+		inputVerticalBar.setValue(inputVerticalBar.getMaximum());
+		inputHorizontalBar.setValue(inputHorizontalBar.getMaximum());
 		
 		chatArea = new JTextArea();
 		chatArea.setEditable(false);
