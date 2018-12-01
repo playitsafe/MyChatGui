@@ -11,6 +11,7 @@ public class ClientMessInfo {
   Socket sc;
   String senderName;
   String message;
+  
 	public ClientMessInfo(Socket s, String senderName, String message) {
 		super();
 		this.sc = s;

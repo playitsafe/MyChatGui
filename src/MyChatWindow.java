@@ -4,6 +4,7 @@ import java.awt.Frame;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.border.EmptyBorder;
 import java.awt.CardLayout;
 import javax.swing.GroupLayout;
@@ -11,6 +12,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.JViewport;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.UIManager;
 import javax.swing.JButton;
@@ -29,6 +31,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JScrollPane;
 
 public class MyChatWindow extends JFrame {
 	
@@ -56,12 +59,14 @@ public class MyChatWindow extends JFrame {
 	private JButton btnDeletePrivateRoom;
 	private JPanel optionPanel;
 	private JPanel chatPanel;
-	private JLabel lblWelcomeXxxYou;
+	private JLabel lblWelcomeHeader;
 	private JButton btnLeaveChatroom;
-	private JTextArea txtrChatMessages;
-	private JTextArea txtrInputmessage;
+	private JTextArea txtInputmessage;
 	private JButton btnSend;
 	private JComboBox comboBox;
+	private JTextArea chatArea;
+	private JScrollPane scrollPane;
+	private JViewport viewPort;
 
 	/**
 	 * Launch the application.
@@ -243,18 +248,16 @@ public class MyChatWindow extends JFrame {
 		
 		contentPane.add(chatPanel, "chatPanel");
 		chatPanel.setName("chatPanel");		
-		lblWelcomeXxxYou = new JLabel("Welcome, XXX. You are now in Public Chat Room");
+		lblWelcomeHeader = new JLabel("Welcome. You are now in Chat Room");
 		
 		btnLeaveChatroom = new JButton("Leave ChatRoom");
 		
+		txtInputmessage = new JTextArea();
+		txtInputmessage.setName("txtInputmessage");
 		
-		txtrChatMessages = new JTextArea();
-		txtrChatMessages.setText("Chat Messages");
+		btnSend = new JButton("Send");		
 		
-		txtrInputmessage = new JTextArea();
-		txtrInputmessage.setText("InputMessage");
-		
-		btnSend = new JButton("Send");
+		scrollPane = new JScrollPane();
 		GroupLayout gl_chatPanel = new GroupLayout(chatPanel);
 		gl_chatPanel.setHorizontalGroup(
 			gl_chatPanel.createParallelGroup(Alignment.LEADING)
@@ -262,17 +265,17 @@ public class MyChatWindow extends JFrame {
 					.addContainerGap()
 					.addGroup(gl_chatPanel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_chatPanel.createSequentialGroup()
-							.addComponent(lblWelcomeXxxYou, GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
+							.addContainerGap())
+						.addGroup(gl_chatPanel.createSequentialGroup()
+							.addComponent(lblWelcomeHeader, GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
 							.addGap(188)
-							.addComponent(btnLeaveChatroom, GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
+							.addComponent(btnLeaveChatroom, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 							.addGap(7))
-						.addGroup(gl_chatPanel.createSequentialGroup()
-							.addComponent(txtrChatMessages, GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
-							.addGap(8))
-						.addGroup(gl_chatPanel.createSequentialGroup()
-							.addComponent(txtrInputmessage, GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnSend, GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
+						.addGroup(Alignment.TRAILING, gl_chatPanel.createSequentialGroup()
+							.addComponent(txtInputmessage, GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+							.addGap(12)
+							.addComponent(btnSend, GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
 							.addContainerGap())))
 		);
 		gl_chatPanel.setVerticalGroup(
@@ -281,17 +284,27 @@ public class MyChatWindow extends JFrame {
 					.addContainerGap()
 					.addGroup(gl_chatPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnLeaveChatroom, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(lblWelcomeXxxYou, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addComponent(lblWelcomeHeader, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(txtrChatMessages, GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_chatPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(txtrInputmessage, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
-						.addComponent(btnSend, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE))
-					.addContainerGap())
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+					.addGap(18)
+					.addGroup(gl_chatPanel.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(btnSend, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(txtInputmessage, GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE))
+					.addGap(0))
 		);
+		
+		chatArea = new JTextArea();
+		chatArea.setEditable(false);
+		chatArea.setName("chatArea");
+		scrollPane.setViewportView(chatArea);
+		
+		viewPort = scrollPane.getViewport();
+		viewPort.setName("viewPort");
 		chatPanel.setLayout(gl_chatPanel);
 		
+		JScrollBar verticalBar = scrollPane.getVerticalScrollBar();
+		verticalBar.setValue(verticalBar.getMaximum());
 	}
 
 	private void createEvents() {
@@ -342,7 +355,7 @@ public class MyChatWindow extends JFrame {
 	                					
 	                					
 										// run client read thread
-	                		            ClientRead = new ClientRead(clientSocket, optionPanel, chatPanel);
+	                		            ClientRead = new ClientRead(clientSocket, optionPanel, chatPanel, viewPort);
 	                		            ClientRead.start();
 	                		        
 	                		            // run client write thread
@@ -479,6 +492,7 @@ public class MyChatWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				optionPanel.setVisible(false);
 				chatPanel.setVisible(true);
+				lblWelcomeHeader.setText("Hi "+txtUsername.getText()+", you are now in Public Chat Room!");
 				
 				try {
 					DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
@@ -486,35 +500,7 @@ public class MyChatWindow extends JFrame {
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}
-				
-				/*
-				String cServerIP = txtServerip.getText();
-		        String port = txtPort.getText();
-		        String a[]=cServerIP.split("\\.");
-                serverAddress=new byte[a.length];
-                
-                for(int i=0;i<a.length;i++)
-                    serverAddress[i]=(byte) Integer.parseInt(a[i]);
-                
-                serverPort=Integer.parseInt(port);
-				
-				try {
-					clientSocket = new Socket(InetAddress.getByAddress(serverAddress),serverPort);
-				} catch (UnknownHostException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				MyChatServer.PublicRoom.add(clientSocket);
-				//Send message to all members notify them this client is joined the chat room
-                MyChatServer.addPublicMessage(new ClientMessInfo(clientSocket,"Control",clientName+" is joined"));
-                MyChatServer.bthread.startmessage();
-                */
-                
+				}		
 			}
 		});
 		
@@ -524,8 +510,33 @@ public class MyChatWindow extends JFrame {
 			}
 		});
 		
+		btnSend.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String input = txtInputmessage.getText();
+				try {
+					DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
+					dos.writeUTF(input+"\n");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				chatArea.append("Me: "+input+"\n");
+				txtInputmessage.setText("");
+			}
+		});
+		
 		btnLeaveChatroom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				
+				try {
+					DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
+					dos.writeUTF("ECCR");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 				optionPanel.setVisible(true);
 				chatPanel.setVisible(false);
 			}

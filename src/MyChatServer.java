@@ -115,6 +115,7 @@ public class MyChatServer {
     {
         publicClientMessagQueue.add(s);
     }
+    
     public synchronized static ClientMessInfo removePublicMessage()
     {
         return publicClientMessagQueue.removeFirst();

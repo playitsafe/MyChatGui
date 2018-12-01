@@ -13,6 +13,9 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JViewport;
 
 /**
  *
@@ -23,18 +26,19 @@ public class ClientRead extends Thread {
    Socket s1;
    JPanel optionPanel;
    JPanel chatPanel;
-   
+   JViewport viewPort;
 
   public ClientRead(Socket s1) {
 	super();
 	this.s1 = s1;
   }
   
-  public ClientRead(Socket s1, JPanel optionPanel, JPanel chatPanel) {
+  public ClientRead(Socket s1, JPanel optionPanel, JPanel chatPanel, JViewport viewPort) {
 	super();
 	this.s1 = s1;
 	this.optionPanel = optionPanel;
 	this.chatPanel = chatPanel;
+	this.viewPort = viewPort;
   }
   
   
@@ -52,39 +56,48 @@ public class ClientRead extends Thread {
                 String st = new String (dis.readUTF());                
                 Component[] optionComp = optionPanel.getComponents();
                 Component[] chatComp = chatPanel.getComponents();
+                Component[] viewPortComp = viewPort.getComponents();
                 
                 if(st.toUpperCase().equals("SHUTDOWN"))
                 {
                     MyChatClient.terminateClientConecction();
                     break;
+                }                
+                else if(st.equals("ChatSysInfo_Connected"))
+                {
+                	System.out.println(st);
+                	for (int i = 0; i < optionComp.length; i++) 
+                	{
+                		if (optionComp[i].getName()!=null) {
+                			
+                			if (optionComp[i].getName().equals("btnConnectMeTo")) {
+                				optionComp[i].setEnabled(false);
+                				((JButton) optionComp[i]).setText("You are Connected!");
+    						}
+                			
+                			if (optionComp[i].getName().equals("comboBox")) {
+                				optionComp[i].setEnabled(true);
+							}
+						}
+                	}
                 }
+                else if (st.equals("ChatSysInfo_NameExisted")) 
+                {
+					MyChatWindow.popUpAlert("THE ENTERED NAME IS ALREADY USED, PLEASE ENTER ANOTHER NAME");
+				}
                 else
                 {
-                	////////////////////////////////////////////////////
-                	System.out.println(st);
-                	if (st.startsWith("System: Welcome")) {
-                		for (int i = 0; i < optionComp.length; i++) {
-                    		if (optionComp[i].getName()!=null) {
-                    			if (optionComp[i].getName().equals("btnConnectMeTo")) {
-                    				optionComp[i].setEnabled(false);
-                    				((JButton) optionComp[i]).setText("Connected!");
-        						}
-                    			
-                    			if (optionComp[i].getName().equals("comboBox")) {
-                    				optionComp[i].setEnabled(true);
-								}
-    						}
-                    	}
-					}
-                	
-                	                	                	
-                	
-                	
-                	
-                	MyChatWindow.popUpAlert(st);
-                }                  
-                //dis.close();
-	         }
+                	//System.out.println(st);
+                	for (int i = 0; i < viewPortComp.length; i++) 
+                	{
+                		if (viewPortComp[i].getName()!=null) {                			
+                			if (viewPortComp[i].getName().equals("chatArea")) {
+                				((JTextArea) viewPortComp[i]).append(st+"\n");                 				
+    						}                			
+						}
+                	}
+                }                               
+             }
 	  } catch (IOException e) {
               try {
                 // TODO Auto-generated catch block

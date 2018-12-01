@@ -46,7 +46,7 @@ public class SerClientThread extends Thread{
             //Check and set client name from client console
             checkAndSetClientName();
 
-            dos.writeUTF("System: Welcome "+ clientName +" to the chat application");
+            dos.writeUTF("ChatSysInfo_Connected");
             //Immediate Interaction after Connection
             int attempts=3;
             String option="";
@@ -66,7 +66,7 @@ public class SerClientThread extends Thread{
                 
                 if(option.toUpperCase().equals("JPUB"))
                 {
-                    dos.writeUTF("YOU ARE NOW IN PUBLIC CHAT ROOM");
+                    //dos.writeUTF("YOU ARE NOW IN PUBLIC CHAT ROOM");
                     MyChatServer.PublicRoom.add(s1);
                     //Send message to all members notify them this client is joined the chat room
                     MyChatServer.addPublicMessage(new ClientMessInfo(s1,"Control",clientName+" is joined"));
@@ -85,7 +85,7 @@ public class SerClientThread extends Thread{
                             MyChatServer.bthread.startmessage();
 
                             MyChatServer.PublicRoom.remove(s1);
-                            dos.writeUTF("THE CHAT OPTIOS ARE:\n 1- Join Public Chat, enter JPUB \n 2- Join Private Chat Room, enter JPRIV <passcode> \n 3- Create Private Chat Room, enter Create <passcode> <MaxMember> \n 4- Delete Private Chat Room. enter Delete <passcode>");
+                            //dos.writeUTF("THE CHAT OPTIOS ARE:\n 1- Join Public Chat, enter JPUB \n 2- Join Private Chat Room, enter JPRIV <passcode> \n 3- Create Private Chat Room, enter Create <passcode> <MaxMember> \n 4- Delete Private Chat Room. enter Delete <passcode>");
                             attempts=3;
                             break;
                         }
@@ -339,9 +339,9 @@ public class SerClientThread extends Thread{
                 {
                     OutputStream sout = s1.getOutputStream();
                     DataOutputStream dos = new DataOutputStream(sout);
-                    dos.writeUTF("THE ENTERED NAME("+clientName+ ") IS ALREADY USED, PLEASE ENTER ANOTHER NAME");
+                    dos.writeUTF("ChatSysInfo_NameExisted");
+                    //dos.writeUTF("ChatSystemInfo: THE ENTERED NAME("+clientName+ ") IS ALREADY USED, PLEASE ENTER ANOTHER NAME");
                     //MyChatWindow.popUpAlert("THE ENTERED NAME("+clientName+ ") ISS ALREADY USED, PLEASE ENTER ANOTHER NAME");
-                    //MyChatWindow.terminateClientConecction();                  
                     
                 }catch(IOException ex)
                 {
