@@ -1,11 +1,14 @@
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Frame;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.DefaultCaret;
+
 import java.awt.CardLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -32,6 +35,8 @@ import javax.swing.JTextArea;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JScrollPane;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 public class MyChatWindow extends JFrame {
 	
@@ -50,7 +55,7 @@ public class MyChatWindow extends JFrame {
 	private JTextField txtPort;
 	private JButton btnConnectMeTo;
 	private JTextField txtEnterPrivateroomPasscode;
-	private JTextField txtEnterPasscode;
+	private JTextField txtCreatePasscode;
 	private JTextField txtMaxMember;
 	private JTextField txtDeleteCode;
 	private JButton btnJoinPublicRoom;
@@ -68,6 +73,9 @@ public class MyChatWindow extends JFrame {
 	private JViewport viewPort;
 	private JScrollPane inputScrollPane;
 	private JTextArea txtInputmessage;
+	private JScrollBar inputVerticalBar;
+	private JScrollBar inputHorizontalBar;
+	private JScrollBar chatAreaBar;
 
 	/**
 	 * Launch the application.
@@ -137,7 +145,7 @@ public class MyChatWindow extends JFrame {
 		btnJoinPublicRoom.setVisible(false);
 		
 		txtEnterPrivateroomPasscode = new JTextField();
-		txtEnterPrivateroomPasscode.setText("Enter PrivateRoom Passcode...");
+		txtEnterPrivateroomPasscode.setText("111");
 		txtEnterPrivateroomPasscode.setColumns(10);
 		txtEnterPrivateroomPasscode.setVisible(false);
 		
@@ -145,10 +153,10 @@ public class MyChatWindow extends JFrame {
 		
 		btnJoinPrivateRoom.setVisible(false);
 		
-		txtEnterPasscode = new JTextField();
-		txtEnterPasscode.setText("Enter PassCode");
-		txtEnterPasscode.setColumns(10);
-		txtEnterPasscode.setVisible(false);
+		txtCreatePasscode = new JTextField();
+		txtCreatePasscode.setText("Enter PassCode");
+		txtCreatePasscode.setColumns(10);
+		txtCreatePasscode.setVisible(false);
 		
 		txtMaxMember = new JTextField();
 		txtMaxMember.setText("Max member");
@@ -156,6 +164,7 @@ public class MyChatWindow extends JFrame {
 		txtMaxMember.setVisible(false);
 		
 		btnCreatePrivateRoom = new JButton("Create Private Room");
+		
 		btnCreatePrivateRoom.setVisible(false);
 		
 		btnDeletePrivateRoom = new JButton("Delete Private Room");
@@ -191,7 +200,7 @@ public class MyChatWindow extends JFrame {
 							.addGroup(gl_optionPanel.createParallelGroup(Alignment.TRAILING)
 								.addComponent(txtDeleteCode, GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
 								.addGroup(gl_optionPanel.createSequentialGroup()
-									.addComponent(txtEnterPasscode, GroupLayout.PREFERRED_SIZE, 118, Short.MAX_VALUE)
+									.addComponent(txtCreatePasscode, GroupLayout.PREFERRED_SIZE, 118, Short.MAX_VALUE)
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(txtMaxMember, GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE))
 								.addComponent(txtEnterPrivateroomPasscode, GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE))
@@ -236,7 +245,7 @@ public class MyChatWindow extends JFrame {
 					.addGroup(gl_optionPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(txtMaxMember, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnCreatePrivateRoom)
-						.addComponent(txtEnterPasscode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(txtCreatePasscode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(gl_optionPanel.createParallelGroup(Alignment.BASELINE, false)
 						.addComponent(btnDeletePrivateRoom)
@@ -296,12 +305,13 @@ public class MyChatWindow extends JFrame {
 		
 		txtInputmessage = new JTextArea();
 		inputScrollPane.setViewportView(txtInputmessage);
-		JScrollBar inputVerticalBar = inputScrollPane.getVerticalScrollBar();
-		JScrollBar inputHorizontalBar = inputScrollPane.getHorizontalScrollBar();
-		inputVerticalBar.setValue(inputVerticalBar.getMaximum());
-		inputHorizontalBar.setValue(inputHorizontalBar.getMaximum());
+		//inputVerticalBar = inputScrollPane.getVerticalScrollBar();
+		//inputHorizontalBar = inputScrollPane.getHorizontalScrollBar();
+		//inputVerticalBar.setValue(inputVerticalBar.getMaximum());
+		//inputHorizontalBar.setValue(inputHorizontalBar.getMaximum());
 		
 		chatArea = new JTextArea();
+		
 		chatArea.setEditable(false);
 		chatArea.setName("chatArea");
 		scrollPane.setViewportView(chatArea);
@@ -310,8 +320,11 @@ public class MyChatWindow extends JFrame {
 		viewPort.setName("viewPort");
 		chatPanel.setLayout(gl_chatPanel);
 		
-		JScrollBar verticalBar = scrollPane.getVerticalScrollBar();
-		verticalBar.setValue(verticalBar.getMaximum());
+		DefaultCaret caret = (DefaultCaret)chatArea.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		
+		//chatAreaBar = scrollPane.getVerticalScrollBar();
+		//chatAreaBar.setValue(chatAreaBar.getMaximum());
 	}
 
 	private void createEvents() {
@@ -422,7 +435,7 @@ public class MyChatWindow extends JFrame {
 					txtEnterPrivateroomPasscode.setVisible(false);
 					btnJoinPrivateRoom.setVisible(false);
 					
-					txtEnterPasscode.setVisible(false);
+					txtCreatePasscode.setVisible(false);
 					txtMaxMember.setVisible(false);
 					btnCreatePrivateRoom.setVisible(false);
 					
@@ -436,7 +449,7 @@ public class MyChatWindow extends JFrame {
 					txtEnterPrivateroomPasscode.setVisible(false);
 					btnJoinPrivateRoom.setVisible(false);
 					
-					txtEnterPasscode.setVisible(false);
+					txtCreatePasscode.setVisible(false);
 					txtMaxMember.setVisible(false);
 					btnCreatePrivateRoom.setVisible(false);
 					
@@ -451,7 +464,7 @@ public class MyChatWindow extends JFrame {
 					txtEnterPrivateroomPasscode.setVisible(true);
 					btnJoinPrivateRoom.setVisible(true);
 					
-					txtEnterPasscode.setVisible(false);
+					txtCreatePasscode.setVisible(false);
 					txtMaxMember.setVisible(false);
 					btnCreatePrivateRoom.setVisible(false);
 					
@@ -466,7 +479,7 @@ public class MyChatWindow extends JFrame {
 					txtEnterPrivateroomPasscode.setVisible(false);
 					btnJoinPrivateRoom.setVisible(false);
 					
-					txtEnterPasscode.setVisible(true);
+					txtCreatePasscode.setVisible(true);
 					txtMaxMember.setVisible(true);
 					btnCreatePrivateRoom.setVisible(true);
 					
@@ -481,7 +494,7 @@ public class MyChatWindow extends JFrame {
 					txtEnterPrivateroomPasscode.setVisible(false);
 					btnJoinPrivateRoom.setVisible(false);
 					
-					txtEnterPasscode.setVisible(false);
+					txtCreatePasscode.setVisible(false);
 					txtMaxMember.setVisible(false);
 					btnCreatePrivateRoom.setVisible(false);
 					
@@ -511,9 +524,57 @@ public class MyChatWindow extends JFrame {
 			}
 		});
 		
+		btnCreatePrivateRoom.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String passCode = txtCreatePasscode.getText();
+				String maxMem = txtMaxMember.getText();
+				String pattern="[0-9]+[0-9]*";
+				
+				if (passCode.equals("")||maxMem.equals("")) {
+					popUpAlert("Please specify both PassCode & Max Number of Members");
+				} else if (passCode.matches(pattern)) {
+					if (maxMem.matches(pattern)) {
+						int temp = Integer.parseInt(maxMem);
+						if (temp>1) {
+							//all conditions matched, send the code
+							try {
+								DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
+								dos.writeUTF("CREATE "+passCode+" "+maxMem);
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
+							//changed to chat interface
+							optionPanel.setVisible(false);
+							chatPanel.setVisible(true);
+						} else {
+							popUpAlert("INVALID maxMEM VALUE!!");
+						}
+					} else {
+						popUpAlert("INVALID maxMEM VALUE!!");
+					}
+				} else {
+					popUpAlert("Wrong PassCode Format!!");
+				}
+			}
+		});
+		
 		btnJoinPrivateRoom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String passCode = txtEnterPrivateroomPasscode.getText();
+				optionPanel.setVisible(false);
+				chatPanel.setVisible(true);
 				
+				if (passCode.equals("")) {
+					popUpAlert("PassCode Missing!");
+				}
+				try {
+					DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
+					dos.writeUTF(passCode);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		
@@ -524,7 +585,6 @@ public class MyChatWindow extends JFrame {
 					DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
 					dos.writeUTF(input+"\n");
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				
@@ -540,7 +600,6 @@ public class MyChatWindow extends JFrame {
 					DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
 					dos.writeUTF("ECCR");
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				

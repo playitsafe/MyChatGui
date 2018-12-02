@@ -92,7 +92,7 @@ public class ClientRead extends Thread {
                 	{
                 		if (viewPortComp[i].getName()!=null) {                			
                 			if (viewPortComp[i].getName().equals("chatArea")) {
-                				((JTextArea) viewPortComp[i]).append(st+"\n");                 				
+                				((JTextArea) viewPortComp[i]).append(st);                 				
     						}                			
 						}
                 	}

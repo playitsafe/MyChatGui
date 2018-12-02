@@ -69,7 +69,7 @@ public class SerClientThread extends Thread{
                     //dos.writeUTF("YOU ARE NOW IN PUBLIC CHAT ROOM");
                     MyChatServer.PublicRoom.add(s1);
                     //Send message to all members notify them this client is joined the chat room
-                    MyChatServer.addPublicMessage(new ClientMessInfo(s1,"Control",clientName+" is joined"));
+                    MyChatServer.addPublicMessage(new ClientMessInfo(s1,"Control",clientName+" is joined\n"));
                     MyChatServer.bthread.startmessage();
                     //System.out.println("recieved:"+newmess);
                     while(true)
@@ -79,9 +79,9 @@ public class SerClientThread extends Thread{
                         if(newmess.toUpperCase().equals("ECCR"))
                         {
                             //Quit message for this client
-                            dos.writeUTF("YOU ARE EXIT FROM PUBLIC CHAT ROOM");
+                            //dos.writeUTF("YOU ARE EXIT FROM PUBLIC CHAT ROOM");
                             //Send control message indicate that this client is left
-                            MyChatServer.addPublicMessage(new ClientMessInfo(s1,"Control",clientName+" is left"));
+                            MyChatServer.addPublicMessage(new ClientMessInfo(s1,"Control",clientName+" is left\n"));
                             MyChatServer.bthread.startmessage();
 
                             MyChatServer.PublicRoom.remove(s1);
