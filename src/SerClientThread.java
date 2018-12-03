@@ -109,14 +109,14 @@ public class SerClientThread extends Thread{
                             if(tPrivateRoom.getNumOfMemebers()<tPrivateRoom.getPrivateRoomLimt())
                             {
                                 tPrivateRoom.joinPrivateRoom(s1);
-                                dos.writeUTF("YOU ARE NOW IN PRIVATE CHAT ROOM <" + passcode + ">");
-                                //Send private message to all private room meembers notify them this client is joined the chat room
-                                tPrivateRoom.addmessage(new ClientMessInfo(s1,"Control",clientName+" is joined"));
+                                dos.writeUTF("ChatSysInfo_ProomJoined");
+                                //dos.writeUTF("Control: YOU ARE NOW IN PRIVATE CHAT ROOM <" + passcode + ">");
+                                //Send private message to all private room members notify them this client is joined the chat room
+                                tPrivateRoom.addmessage(new ClientMessInfo(s1,"Control",clientName+" is joined\n"));
                                 tPrivateRoom.startmessage();
 
                                 while(true)
                                 {
-
                                     String newmess=new String(dis.readUTF());
                                     if(tPrivateRoom.isAlive())
                                     {
@@ -124,13 +124,13 @@ public class SerClientThread extends Thread{
                                         if(newmess.toUpperCase().equals("ECCR"))
                                         {
                                             //Quit message for this client
-                                            dos.writeUTF("YOU ARE EXIT FROM PRIVATE CHAT ROOM " + passcode);
+                                            //dos.writeUTF("YOU ARE EXIT FROM PRIVATE CHAT ROOM " + passcode);
                                             //Send control message indicate that this client is left from private room
-                                            tPrivateRoom.addmessage(new ClientMessInfo(s1,"Control",clientName+" is left"));
+                                            tPrivateRoom.addmessage(new ClientMessInfo(s1,"Control",clientName+" is left\n"));
                                             tPrivateRoom.startmessage();
 
                                             tPrivateRoom.leavePrivateRoom(s1);
-                                            dos.writeUTF("THE CHAT OPTIOS ARE:\n 1- Join Public Chat, enter JPUB \n 2- Join Private Chat Room, enter JPRIV <passcode> \n 3- Create Private Chat Room, enter Create <passcode> <MaxMember> \n 4- Delete Private Chat Room. enter Delete <passcode>");
+                                            //dos.writeUTF("THE CHAT OPTIOS ARE:\n 1- Join Public Chat, enter JPUB \n 2- Join Private Chat Room, enter JPRIV <passcode> \n 3- Create Private Chat Room, enter Create <passcode> <MaxMember> \n 4- Delete Private Chat Room. enter Delete <passcode>");
                                             attempts=3;
                                             break;
                                         }
@@ -150,18 +150,19 @@ public class SerClientThread extends Thread{
                             }
                             else
                             {
-                                dos.writeUTF("ROOM IS FULL! TRY AGAIN AFTER 10mins");
+                                dos.writeUTF("ChatSysInfo_RoomFull");
                                 //diconnect client
-                                String reason="Private room " + passcode + " is full";
-                                shutdownClientConnection(reason);
-                                MyChatServer.removeclient(s1,clientName);
-                                break;
+                                //String reason="Private room " + passcode + " is full";
+                                //shutdownClientConnection(reason);
+                                //MyChatServer.removeclient(s1,clientName);
+                                //break;
                             }
                         }
                         else
                         {
-                            dos.writeUTF("WRONG <PASSCODE>!! THERE IS NO PRIVATE ROOM WITH PASSCODE = "+ passcode +". PLEASE SPECIFY CORRECT PASSCODE");
-                            attempts--;
+                            //dos.writeUTF("WRONG <PASSCODE>!! THERE IS NO PRIVATE ROOM WITH PASSCODE = "+ passcode +". PLEASE SPECIFY CORRECT PASSCODE");
+                        	dos.writeUTF("ChatSysInfo_NoSuchCode");
+                        	attempts--;
                         }
                     //break;
                     }
@@ -187,8 +188,9 @@ public class SerClientThread extends Thread{
                             PrivateRoomThread t=MyChatServer.createPrivateRoom(clientName, passcode, s1, limit);
                             if(t!=null)
                             {
-                                dos.writeUTF("PRIVATE CHAT ROOM " + passcode + " IS CREATED");
-                                dos.writeUTF("YOU ARE NOW IN PRIVATE CHAT ROOM " + passcode);
+                            	dos.writeUTF("ChatSysInfo_ProomCreated");
+                                //dos.writeUTF("PRIVATE CHAT ROOM " + passcode + " IS CREATED.\n");
+                                //dos.writeUTF("YOU ARE NOW IN PRIVATE CHAT ROOM " + passcode);
                                 PrivateRoomThread tPrivateRoom=MyChatServer.retrivePrivateRoom(passcode);
 
                                 while(true)
@@ -199,13 +201,13 @@ public class SerClientThread extends Thread{
                                     if(newmess.toUpperCase().equals("ECCR"))
                                     {
                                         //Quit message for this client
-                                        dos.writeUTF("YOU ARE EXIT FROM PRIVATE CHAT ROOM " + passcode);
+                                        //dos.writeUTF("YOU ARE EXIT FROM PRIVATE CHAT ROOM " + passcode);
                                         //Send control message indicate that this client is left from private room
-                                        tPrivateRoom.addmessage(new ClientMessInfo(s1,"Control",clientName+" is left"));
+                                        tPrivateRoom.addmessage(new ClientMessInfo(s1,"Control",clientName+" is left\n"));
                                         tPrivateRoom.startmessage();
 
                                         tPrivateRoom.leavePrivateRoom(s1);
-                                        dos.writeUTF("THE CHAT OPTIOS ARE:\n 1- Join Public Chat, enter JPUB \n 2- Join Private Chat Room, enter JPRIV <passcode> \n 3- Create Private Chat Room, enter Create <passcode> <MaxMember> \n 4- Delete Private Chat Room. enter Delete <passcode>");
+                                        //dos.writeUTF("THE CHAT OPTIOS ARE:\n 1- Join Public Chat, enter JPUB \n 2- Join Private Chat Room, enter JPRIV <passcode> \n 3- Create Private Chat Room, enter Create <passcode> <MaxMember> \n 4- Delete Private Chat Room. enter Delete <passcode>");
                                         attempts=3;
                                         break;
                                     }
@@ -221,7 +223,7 @@ public class SerClientThread extends Thread{
                         else
                         {
                             attempts--;
-                            dos.writeUTF("THE PROVIDED PASSCODE IS NOT UNIQUE!! PLEASE TRY AGAIN WITH OTHER PASSCODE");
+                            dos.writeUTF("CreateProomFail_CodeExisted");
                         }
                     }
                     else
@@ -256,26 +258,30 @@ public class SerClientThread extends Thread{
                                         os = cs.getOutputStream();
                                         DataOutputStream d = new DataOutputStream (os);;
                                         //Message = the owner is deleted this private room, so you are exit from that room forcedly
-                                        d.writeUTF("Control: THIS PRICATE ROOM IS DELETED BY CREATOR, SO YOU ARE FORCEDLY EXIT FROM IT");
-                                        d.writeUTF("THE CHAT OPTIOS ARE:\n 1- Join Public Chat, enter JPUB \n 2- Join Private Chat Room, enter JPRIV <passcode> \n 3- Create Private Chat Room, enter Create <passcode> <MaxMember> \n 4- Delete Private Chat Room. enter Delete <passcode>");
+                                        d.writeUTF("ChatSysInfo_ForceLeave");
+                                        //d.writeUTF("Control: THIS PRICATE ROOM IS DELETED BY CREATOR, SO YOU ARE FORCEDLY EXIT FROM IT");
+                                        //d.writeUTF("THE CHAT OPTIOS ARE:\n 1- Join Public Chat, enter JPUB \n 2- Join Private Chat Room, enter JPRIV <passcode> \n 3- Create Private Chat Room, enter Create <passcode> <MaxMember> \n 4- Delete Private Chat Room. enter Delete <passcode>");
                                     }
                                 }
                                 //Request from server to delete and interept such thread
                                 MyChatServer.removePrivateRoom(passcode);
-                                dos.writeUTF("PRIVATE CHAT ROOM " + passcode+" IS DELETED");
+                                //dos.writeUTF("PRIVATE CHAT ROOM " + passcode+" IS DELETED");
+                                dos.writeUTF("ChatSysInfo_ProomDeleted");
                                 attempts=3;
-                                dos.writeUTF("THE CHAT OPTIOS ARE:\n 1- Join Public Chat, enter JPUB \n 2- Join Private Chat Room, enter JPRIV <passcode> \n 3- Create Private Chat Room, enter Create <passcode> <MaxMember> \n 4- Delete Private Chat Room. enter Delete <passcode>");
+                                //dos.writeUTF("THE CHAT OPTIOS ARE:\n 1- Join Public Chat, enter JPUB \n 2- Join Private Chat Room, enter JPRIV <passcode> \n 3- Create Private Chat Room, enter Create <passcode> <MaxMember> \n 4- Delete Private Chat Room. enter Delete <passcode>");
                             }
                             else
                             {
-                                dos.writeUTF("YOU ARE NOT A CREATOR OF THIS PRIVATE ROOM");
+                                //dos.writeUTF("YOU ARE NOT A CREATOR OF THIS PRIVATE ROOM");
+                            	dos.writeUTF("ChatSysInfo_NotCreator");
                                 attempts--;
                             }
                         }
                         else
                         {
-                            dos.writeUTF("WRONG <PASSCODE> !! THERE IS NO PRIVATE ROOM WITH PASSCODE = "+ passcode +". PLEASE SPECIFY CORRECT PASSCODE");
-                            attempts--;
+                        	dos.writeUTF("DeleteInfo_CodeNotFound");
+                            //dos.writeUTF("WRONG <PASSCODE> !! THERE IS NO PRIVATE ROOM WITH PASSCODE = "+ passcode +". PLEASE SPECIFY CORRECT PASSCODE");
+                            //attempts--;
                         }
                     }
                     else

@@ -60,7 +60,7 @@ public class ClientRead extends Thread {
                 
                 if(st.toUpperCase().equals("SHUTDOWN"))
                 {
-                    MyChatClient.terminateClientConecction();
+                    MyChatWindow.terminateClientConecction();
                     break;
                 }                
                 else if(st.equals("ChatSysInfo_Connected"))
@@ -84,6 +84,55 @@ public class ClientRead extends Thread {
                 else if (st.equals("ChatSysInfo_NameExisted")) 
                 {
 					MyChatWindow.popUpAlert("THE ENTERED NAME IS ALREADY USED, PLEASE ENTER ANOTHER NAME");
+				}
+                else if (st.equals("ChatSysInfo_ProomCreated")) 
+                {
+                	optionPanel.setVisible(false);
+                	chatPanel.setVisible(true);
+                	
+                	for (int i = 0; i < viewPortComp.length; i++) 
+                	{
+                		if (viewPortComp[i].getName()!=null) {                			
+                			if (viewPortComp[i].getName().equals("chatArea")) {
+                				((JTextArea) viewPortComp[i]).append("Control: Private Chat Room Created!\n");                 				
+    						}                			
+						}
+                	}
+				}
+                else if (st.equals("CreateProomFail_CodeExisted"))
+                {
+                	MyChatWindow.popUpAlert("PassCode existed! Try another code!");
+				}
+                else if (st.equals("ChatSysInfo_RoomFull")) 
+                {
+                	MyChatWindow.popUpAlert("ChatRoom is Full! Try another code!");
+				}
+                else if (st.equals("ChatSysInfo_NoSuchCode")) 
+                {
+                	MyChatWindow.popUpAlert("No ChatRoom with that Code! Try another code!");
+				}
+                else if (st.equals("ChatSysInfo_ProomJoined")) 
+                {
+                	optionPanel.setVisible(false);
+                	chatPanel.setVisible(true);                	
+				}
+                else if (st.equals("ChatSysInfo_NotCreator")) 
+				{
+					MyChatWindow.popUpAlert("YOU ARE NOT A CREATOR OF THIS PRIVATE ROOM!");
+				} 
+				else if (st.equals("DeleteInfo_CodeNotFound"))
+				{
+					MyChatWindow.popUpAlert("THERE IS NO PRIVATE ROOM WITH THAT PASSCODE!");
+				}
+				else if (st.equals("ChatSysInfo_ForceLeave")) 
+				{
+					MyChatWindow.popUpAlert("THIS PRIVATE ROOM IS DELETED BY CREATOR, YOU ARE FORCEDLY EXIT FROM IT");
+					optionPanel.setVisible(true);
+                	chatPanel.setVisible(false);
+				}
+				else if (st.equals("ChatSysInfo_ProomDeleted")) 
+				{
+					MyChatWindow.popUpAlert("Private Room is deleted!");
 				}
                 else
                 {

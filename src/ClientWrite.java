@@ -71,7 +71,7 @@ public class ClientWrite extends Thread {
               try
               {
                   System.out.println("SERVER IS SHUTDOWN");
-                  MyChatClient.terminateClientConecction();
+                  MyChatWindow.terminateClientConecction();
                 //s1out.close();
                 //dos.close();
                 //s1.close();
@@ -88,7 +88,6 @@ public class ClientWrite extends Thread {
 	  try {
 		dos.writeUTF(msg);
 	} catch (IOException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
   

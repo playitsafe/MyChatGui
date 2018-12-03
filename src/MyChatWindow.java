@@ -154,12 +154,12 @@ public class MyChatWindow extends JFrame {
 		btnJoinPrivateRoom.setVisible(false);
 		
 		txtCreatePasscode = new JTextField();
-		txtCreatePasscode.setText("Enter PassCode");
+		txtCreatePasscode.setText("111");
 		txtCreatePasscode.setColumns(10);
 		txtCreatePasscode.setVisible(false);
 		
 		txtMaxMember = new JTextField();
-		txtMaxMember.setText("Max member");
+		txtMaxMember.setText("11");
 		txtMaxMember.setColumns(10);
 		txtMaxMember.setVisible(false);
 		
@@ -167,7 +167,7 @@ public class MyChatWindow extends JFrame {
 		
 		btnCreatePrivateRoom.setVisible(false);
 		
-		btnDeletePrivateRoom = new JButton("Delete Private Room");
+		btnDeletePrivateRoom = new JButton("Delete Private Room");		
 		btnDeletePrivateRoom.setVisible(false);
 		
 		txtDeleteCode = new JTextField();
@@ -177,7 +177,7 @@ public class MyChatWindow extends JFrame {
 		
 		comboBox = new JComboBox();		
 		comboBox.setName("comboBox");
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Please select an option...", "Join Public Chat Room", "Join Private Chat Room", "Create Private Chat Room", "Delete Private Chat Room"}));
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Please select an option...", "Join Public Chat Room", "Join Private Chat Room", "Create Private Chat Room", "Delete Private Chat Room", "Disconnect and SHUTDOWN" }));
 		comboBox.setEnabled(false);
 		comboBox.setSelectedIndex(0);
 		GroupLayout gl_optionPanel = new GroupLayout(optionPanel);
@@ -305,10 +305,6 @@ public class MyChatWindow extends JFrame {
 		
 		txtInputmessage = new JTextArea();
 		inputScrollPane.setViewportView(txtInputmessage);
-		//inputVerticalBar = inputScrollPane.getVerticalScrollBar();
-		//inputHorizontalBar = inputScrollPane.getHorizontalScrollBar();
-		//inputVerticalBar.setValue(inputVerticalBar.getMaximum());
-		//inputHorizontalBar.setValue(inputHorizontalBar.getMaximum());
 		
 		chatArea = new JTextArea();
 		
@@ -322,9 +318,7 @@ public class MyChatWindow extends JFrame {
 		
 		DefaultCaret caret = (DefaultCaret)chatArea.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-		
-		//chatAreaBar = scrollPane.getVerticalScrollBar();
-		//chatAreaBar.setValue(chatAreaBar.getMaximum());
+
 	}
 
 	private void createEvents() {
@@ -343,7 +337,6 @@ public class MyChatWindow extends JFrame {
 		        	//System.exit(0);
 				} else {
 					try {
-						
 						String pattern = "[a-zA-Z]+[a-zA-Z]*+[0-9]*";
 						
 						if (cName.matches(pattern)) {
@@ -381,8 +374,6 @@ public class MyChatWindow extends JFrame {
 	                		            // run client write thread
 	                		            ClientWrite =new ClientWrite(clientSocket,clientName);
 	                		            ClientWrite.start();
-	                		            
-	                		            //comboBox.setEnabled(true);
 	                		            
 	                				} catch (SocketException ex1) {
 	                					
@@ -425,6 +416,7 @@ public class MyChatWindow extends JFrame {
 			}
 		});
 		
+		//action listener for dropdown list
 		comboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int selectedIndex = comboBox.getSelectedIndex();
@@ -502,6 +494,42 @@ public class MyChatWindow extends JFrame {
 					btnDeletePrivateRoom.setVisible(true);
 					
 					break;
+					
+				case 5:
+					btnJoinPublicRoom.setVisible(false);
+					
+					txtEnterPrivateroomPasscode.setVisible(false);
+					btnJoinPrivateRoom.setVisible(false);
+					
+					txtCreatePasscode.setVisible(false);
+					txtMaxMember.setVisible(false);
+					btnCreatePrivateRoom.setVisible(false);
+					
+					txtDeleteCode.setVisible(false);
+					btnDeletePrivateRoom.setVisible(false);
+					
+					int dialogButton = JOptionPane.YES_NO_OPTION;
+					int dialogResult = JOptionPane.showConfirmDialog (null, "Do you really want to disconnect from the server?","Warning",dialogButton);
+					if(dialogResult == JOptionPane.YES_OPTION){
+						try {
+							DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
+							dos.writeUTF("SHUTDOWN");
+							
+							comboBox.setEnabled(false);
+							txtUsername.setEnabled(true);
+							txtServerip.setEnabled(true);
+							txtPort.setEnabled(true);
+							btnConnectMeTo.setEnabled(true);
+							btnConnectMeTo.setText("Connect Me to Server!");
+							
+							
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+					}
+					
+					break;
+					
 				default:
 					break;
 				}
@@ -518,7 +546,6 @@ public class MyChatWindow extends JFrame {
 					DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
 					dos.writeUTF("JPUB");
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}		
 			}
@@ -536,7 +563,7 @@ public class MyChatWindow extends JFrame {
 					if (maxMem.matches(pattern)) {
 						int temp = Integer.parseInt(maxMem);
 						if (temp>1) {
-							//all conditions matched, send the code
+							//send the code
 							try {
 								DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
 								dos.writeUTF("CREATE "+passCode+" "+maxMem);
@@ -545,9 +572,29 @@ public class MyChatWindow extends JFrame {
 								e1.printStackTrace();
 							}
 							
-							//changed to chat interface
-							optionPanel.setVisible(false);
-							chatPanel.setVisible(true);
+							//set welcome header
+							lblWelcomeHeader.setText("Hi, "+txtUsername.getText()+", you are now in Private Chat Room "+txtCreatePasscode.getText());
+							//int passCodeInt = Integer.parseInt(passCode);
+							//boolean checkPasscode=MyChatServer.isPasscodeUnique(passCodeInt);								
+							
+							/*
+							if (checkPasscode) {
+								//if matched,send the code
+								try {
+									DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
+									dos.writeUTF("CREATE "+passCode+" "+maxMem);
+								} catch (IOException e1) {
+									e1.printStackTrace();
+								}
+								popUpAlert(Integer.toString(passCodeInt));
+								//switch to chat window
+								optionPanel.setVisible(false);
+								chatPanel.setVisible(true);
+								lblWelcomeHeader.setText("Welcome, "+txtUsername.getText()+". You are now in Private ChatRoom "+passCode);
+							} else {
+								popUpAlert("Private ChatRoom with code "+passCode+" already existed!");
+							}
+							*/
 						} else {
 							popUpAlert("INVALID maxMEM VALUE!!");
 						}
@@ -555,56 +602,91 @@ public class MyChatWindow extends JFrame {
 						popUpAlert("INVALID maxMEM VALUE!!");
 					}
 				} else {
-					popUpAlert("Wrong PassCode Format!!");
+					popUpAlert("Wrong PassCode Format!");
 				}
 			}
 		});
 		
 		btnJoinPrivateRoom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String passCode = txtEnterPrivateroomPasscode.getText();
-				optionPanel.setVisible(false);
-				chatPanel.setVisible(true);
+				String passCode = txtEnterPrivateroomPasscode.getText();				
+				String pattern="[0-9]+[0-9]*";
+				//optionPanel.setVisible(false);
+				//chatPanel.setVisible(true);
 				
 				if (passCode.equals("")) {
 					popUpAlert("PassCode Missing!");
+				} else if (!passCode.matches(pattern)) {
+					popUpAlert("Wrong PassCode Format!");
+				} else {
+					try {
+						DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
+						dos.writeUTF("JPRIV "+passCode);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					
+					lblWelcomeHeader.setText("Hi, "+txtUsername.getText()+", you joined in Private Chat Room "+txtEnterPrivateroomPasscode.getText());
 				}
-				try {
-					DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
-					dos.writeUTF(passCode);
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+				
 			}
 		});
 		
 		btnSend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String input = txtInputmessage.getText();
-				try {
-					DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
-					dos.writeUTF(input+"\n");
-				} catch (IOException e1) {
-					e1.printStackTrace();
+				if (input.equals("")) {
+					popUpAlert("Please say something!");
+				} else {
+					try {
+						DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
+						dos.writeUTF(input+"\n");
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					
+					chatArea.append("Me: "+input+"\n");
+					txtInputmessage.setText("");
 				}
 				
-				chatArea.append("Me: "+input+"\n");
-				txtInputmessage.setText("");
 			}
 		});
 		
 		btnLeaveChatroom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				try {
-					DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
-					dos.writeUTF("ECCR");
-				} catch (IOException e1) {
-					e1.printStackTrace();
+				int dialogButton = JOptionPane.YES_NO_OPTION;
+				int dialogResult = JOptionPane.showConfirmDialog (null, "Do you really want to exit current ChatRoom?","Warning",dialogButton);
+				if(dialogResult == JOptionPane.YES_OPTION){
+					try {
+						DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
+						dos.writeUTF("ECCR");
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					chatArea.setText("");
+					optionPanel.setVisible(true);
+					chatPanel.setVisible(false);
 				}
-				
-				optionPanel.setVisible(true);
-				chatPanel.setVisible(false);
+			}
+		});
+		
+		btnDeletePrivateRoom.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String passCode = txtDeleteCode.getText();
+				String pattern="[0-9]+[0-9]*";
+				if (passCode.equals("")) {
+					popUpAlert("PassCode missing!");
+				} else if (!passCode.matches(pattern)) {
+					popUpAlert("Wrong PassCode Format!");
+				} else {
+					try {
+						DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
+						dos.writeUTF("DELETE "+passCode);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
 			}
 		});
 	}
