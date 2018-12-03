@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Frame;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -123,16 +124,27 @@ public class MyChatWindow extends JFrame {
 		JLabel lblSpecifyYourName = new JLabel("Specify Your Name and Sever Info to Get Connected First");
 		
 		txtUsername = new JTextField();
-		txtUsername.setText("Username");
+		TextPrompt namePrompt = new TextPrompt("UserName", txtUsername);
+		namePrompt.changeStyle(Font.BOLD+Font.ITALIC);
+		namePrompt.changeAlpha(0.4f);		
 		txtUsername.setColumns(10);
+		txtUsername.setName("txtUsername");
 		
 		txtServerip = new JTextField();
-		txtServerip.setText("127.0.0.1");
+		TextPrompt ipPrompt = new TextPrompt("Server IP", txtServerip);
+		//txtServerip.setText("127.0.0.1");
+		ipPrompt.changeStyle(Font.BOLD+Font.ITALIC);
+		ipPrompt.changeAlpha(0.4f);
 		txtServerip.setColumns(10);
+		txtServerip.setName("txtServerip");
 		
 		txtPort = new JTextField();
-		txtPort.setText("12345");
+		//txtPort.setText("12345");
+		TextPrompt portPrompt = new TextPrompt("Server Port", txtPort);
+		portPrompt.changeStyle(Font.BOLD+Font.ITALIC);
+		portPrompt.changeAlpha(0.4f);
 		txtPort.setColumns(10);
+		txtPort.setName("txtPort");
 		
 		btnConnectMeTo = new JButton("Connect Me to Server!");
 		btnConnectMeTo.setName("btnConnectMeTo");
@@ -145,7 +157,10 @@ public class MyChatWindow extends JFrame {
 		btnJoinPublicRoom.setVisible(false);
 		
 		txtEnterPrivateroomPasscode = new JTextField();
-		txtEnterPrivateroomPasscode.setText("111");
+		//txtEnterPrivateroomPasscode.setText("111");
+		TextPrompt jprivPrompt = new TextPrompt("PrivateRoom PassCode", txtEnterPrivateroomPasscode);
+		jprivPrompt.changeStyle(Font.BOLD+Font.ITALIC);
+		jprivPrompt.changeAlpha(0.4f);
 		txtEnterPrivateroomPasscode.setColumns(10);
 		txtEnterPrivateroomPasscode.setVisible(false);
 		
@@ -154,12 +169,18 @@ public class MyChatWindow extends JFrame {
 		btnJoinPrivateRoom.setVisible(false);
 		
 		txtCreatePasscode = new JTextField();
-		txtCreatePasscode.setText("111");
+		//txtCreatePasscode.setText("111");
+		TextPrompt createPrompt = new TextPrompt("Create PassCode", txtCreatePasscode);
+		createPrompt.changeStyle(Font.BOLD+Font.ITALIC);
+		createPrompt.changeAlpha(0.4f);
 		txtCreatePasscode.setColumns(10);
 		txtCreatePasscode.setVisible(false);
 		
 		txtMaxMember = new JTextField();
-		txtMaxMember.setText("11");
+		//txtMaxMember.setText("11");
+		TextPrompt maxMemPrompt = new TextPrompt("Max Member", txtMaxMember);
+		maxMemPrompt.changeStyle(Font.BOLD+Font.ITALIC);
+		maxMemPrompt.changeAlpha(0.4f);
 		txtMaxMember.setColumns(10);
 		txtMaxMember.setVisible(false);
 		
@@ -171,7 +192,10 @@ public class MyChatWindow extends JFrame {
 		btnDeletePrivateRoom.setVisible(false);
 		
 		txtDeleteCode = new JTextField();
-		txtDeleteCode.setText("Enter Passcode to be deleted...");
+		//txtDeleteCode.setText("Enter Passcode to be deleted...");
+		TextPrompt deletePrompt = new TextPrompt("Passcode to be deleted", txtDeleteCode);
+		deletePrompt.changeStyle(Font.BOLD+Font.ITALIC);
+		deletePrompt.changeAlpha(0.4f);
 		txtDeleteCode.setColumns(10);
 		txtDeleteCode.setVisible(false);
 		
@@ -203,12 +227,12 @@ public class MyChatWindow extends JFrame {
 									.addComponent(txtCreatePasscode, GroupLayout.PREFERRED_SIZE, 118, Short.MAX_VALUE)
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(txtMaxMember, GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE))
-								.addComponent(txtEnterPrivateroomPasscode, GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE))
-							.addGap(18)
-							.addGroup(gl_optionPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(btnCreatePrivateRoom, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnJoinPrivateRoom, GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-								.addComponent(btnDeletePrivateRoom, GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)))
+								.addComponent(txtEnterPrivateroomPasscode, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.RELATED, 18, GroupLayout.PREFERRED_SIZE)
+							.addGroup(gl_optionPanel.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(btnDeletePrivateRoom, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnCreatePrivateRoom, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnJoinPrivateRoom, GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)))
 						.addComponent(btnJoinPublicRoom, GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
 						.addComponent(btnConnectMeTo, GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
 						.addGroup(gl_optionPanel.createSequentialGroup()
@@ -515,19 +539,10 @@ public class MyChatWindow extends JFrame {
 							DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
 							dos.writeUTF("SHUTDOWN");
 							
-							comboBox.setEnabled(false);
-							txtUsername.setEnabled(true);
-							txtServerip.setEnabled(true);
-							txtPort.setEnabled(true);
-							btnConnectMeTo.setEnabled(true);
-							btnConnectMeTo.setText("Connect Me to Server!");
-							
-							
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
 					}
-					
 					break;
 					
 				default:
@@ -568,7 +583,6 @@ public class MyChatWindow extends JFrame {
 								DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
 								dos.writeUTF("CREATE "+passCode+" "+maxMem);
 							} catch (IOException e1) {
-								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
 							

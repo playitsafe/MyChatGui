@@ -68,14 +68,22 @@ public class ClientRead extends Thread {
                 	System.out.println(st);
                 	for (int i = 0; i < optionComp.length; i++) 
                 	{
-                		if (optionComp[i].getName()!=null) {
+                		String compName = optionComp[i].getName();
+                		if (compName!=null) {
                 			
-                			if (optionComp[i].getName().equals("btnConnectMeTo")) {
+                			if (compName.equals("btnConnectMeTo")) {
                 				optionComp[i].setEnabled(false);
                 				((JButton) optionComp[i]).setText("You are Connected!");
     						}
                 			
-                			if (optionComp[i].getName().equals("comboBox")) {
+                			if (compName.equals("txtUsername")||
+                				compName.equals("txtServerip")||
+                				compName.equals("txtPort")) 
+                			{
+                				optionComp[i].setEnabled(false);                				
+    						}
+                			
+                			if (compName.equals("comboBox")) {
                 				optionComp[i].setEnabled(true);
 							}
 						}
@@ -149,15 +157,11 @@ public class ClientRead extends Thread {
              }
 	  } catch (IOException e) {
               try {
-                // TODO Auto-generated catch block
-                //e.printStackTrace();
+                
                   //System.out.println("SERVER IS SHUTDOWN");
                   //MyChatClient.terminateClientConecction();
             	  MyChatWindow.terminateClientConecction();
-                //s1In.close();
-                //dis.close();
-                //s1.close();
-                //this.interrupt();
+                
             } catch (AbstractMethodError ex) {
             }
 		}
