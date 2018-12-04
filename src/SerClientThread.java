@@ -347,8 +347,7 @@ public class SerClientThread extends Thread{
                     DataOutputStream dos = new DataOutputStream(sout);
                     dos.writeUTF("ChatSysInfo_NameExisted");
                     //dos.writeUTF("ChatSystemInfo: THE ENTERED NAME("+clientName+ ") IS ALREADY USED, PLEASE ENTER ANOTHER NAME");
-                    //MyChatWindow.popUpAlert("THE ENTERED NAME("+clientName+ ") ISS ALREADY USED, PLEASE ENTER ANOTHER NAME");
-                    
+                   
                 }catch(IOException ex)
                 {
 
@@ -356,7 +355,6 @@ public class SerClientThread extends Thread{
             }     
         }
 
-       
         //System.out.println("Server connected to "+ clientName + " on port " + s1.getPort());
 
         //Create client infomration object
@@ -365,13 +363,7 @@ public class SerClientThread extends Thread{
         //Add client to clients infomration queue
         MyChatServer.addClientsInfo(cInfor);
    }
-   /*
-   public static String checkAndSetClientName1() {
-	   String msg = "test!!!";
-	   return msg;
-   }
-   */
-
+   
    //ask user to input new name if it's in use
    public String readClientName()
     {

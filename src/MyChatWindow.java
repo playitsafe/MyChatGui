@@ -38,6 +38,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JScrollPane;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+import java.awt.Toolkit;
 
 public class MyChatWindow extends JFrame {
 	
@@ -103,9 +104,13 @@ public class MyChatWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public MyChatWindow() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(MyChatWindow.class.getResource("/resource/icon.png")));
 		
 		setTitle("MyChat");
+		
+		//a method hold all Gui components
 		initComponets();
+		//a method hold all event listeners
 		createEvents();			
 	}
 
@@ -520,20 +525,9 @@ public class MyChatWindow extends JFrame {
 					break;
 					
 				case 5:
-					btnJoinPublicRoom.setVisible(false);
-					
-					txtEnterPrivateroomPasscode.setVisible(false);
-					btnJoinPrivateRoom.setVisible(false);
-					
-					txtCreatePasscode.setVisible(false);
-					txtMaxMember.setVisible(false);
-					btnCreatePrivateRoom.setVisible(false);
-					
-					txtDeleteCode.setVisible(false);
-					btnDeletePrivateRoom.setVisible(false);
 					
 					int dialogButton = JOptionPane.YES_NO_OPTION;
-					int dialogResult = JOptionPane.showConfirmDialog (null, "Do you really want to disconnect from the server?","Warning",dialogButton);
+					int dialogResult = JOptionPane.showConfirmDialog (null, "Do you really want to Disconnect and EXIT?","Warning",dialogButton);
 					if(dialogResult == JOptionPane.YES_OPTION){
 						try {
 							DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
@@ -713,10 +707,10 @@ public class MyChatWindow extends JFrame {
             clientSocket.close();
             System.exit(0);
         } catch (IOException ex) {
-            Logger.getLogger(MyChatClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MyChatWindow.class.getName()).log(Level.SEVERE, null, ex);
         }catch (SecurityException ex2)
         {
-            Logger.getLogger(MyChatClient.class.getName()).log(Level.SEVERE, null, ex2);
+            Logger.getLogger(MyChatWindow.class.getName()).log(Level.SEVERE, null, ex2);
         }
 
     }

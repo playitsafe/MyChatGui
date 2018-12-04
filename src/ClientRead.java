@@ -65,7 +65,7 @@ public class ClientRead extends Thread {
                 }                
                 else if(st.equals("ChatSysInfo_Connected"))
                 {
-                	System.out.println(st);
+                	
                 	for (int i = 0; i < optionComp.length; i++) 
                 	{
                 		String compName = optionComp[i].getName();
