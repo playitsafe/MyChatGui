@@ -9,6 +9,7 @@ import java.net.Socket;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -122,7 +123,12 @@ public class ClientRead extends Thread {
                 else if (st.equals("ChatSysInfo_ProomJoined")) 
                 {
                 	optionPanel.setVisible(false);
-                	chatPanel.setVisible(true);                	
+                	optionPanel.setOpaque(false);
+                	//optionPanel.setLayout(null);
+                	chatPanel.setVisible(true);   
+                	//chatPanel.revalidate();
+                	//chatPanel.repaint();
+                	chatPanel.setOpaque(true);
 				}
                 else if (st.equals("ChatSysInfo_NotCreator")) 
 				{
@@ -135,12 +141,45 @@ public class ClientRead extends Thread {
 				else if (st.equals("ChatSysInfo_ForceLeave")) 
 				{
 					MyChatWindow.popUpAlert("THIS PRIVATE ROOM IS DELETED BY CREATOR, YOU ARE FORCEDLY EXIT FROM IT");
-					optionPanel.setVisible(true);
+					
+                	
+                	//clear chatArea text
+                	for (int i = 0; i < viewPortComp.length; i++) 
+                	{
+                		if (viewPortComp[i].getName()!=null) {                			
+                			if (viewPortComp[i].getName().equals("chatArea")) {
+                				((JTextArea) viewPortComp[i]).setText("");                 				
+    						}                			
+						}
+                	}
+                	
                 	chatPanel.setVisible(false);
+                	optionPanel.setVisible(true);
+                	
+                	for (int i = 0; i < optionComp.length; i++) 
+                	{
+                		String compName = optionComp[i].getName();
+                		if (compName!=null) {                			
+                			if (compName.equals("comboBox")) {                				
+                				((JComboBox) optionComp[i]).setSelectedIndex(0);
+    						}                			
+						}
+                	}
+                	
 				}
 				else if (st.equals("ChatSysInfo_ProomDeleted")) 
 				{
 					MyChatWindow.popUpAlert("Private Room is deleted!");
+					
+					for (int i = 0; i < optionComp.length; i++) 
+                	{
+                		String compName = optionComp[i].getName();
+                		if (compName!=null) {                			
+                			if (compName.equals("comboBox")) {                				
+                				((JComboBox) optionComp[i]).setSelectedIndex(0);
+    						}                			
+						}
+                	}
 				}
                 else
                 {

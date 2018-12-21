@@ -137,14 +137,14 @@ public class MyChatWindow extends JFrame {
 		
 		txtServerip = new JTextField();
 		TextPrompt ipPrompt = new TextPrompt("Server IP", txtServerip);
-		//txtServerip.setText("127.0.0.1");
+		txtServerip.setText("127.0.0.1");
 		ipPrompt.changeStyle(Font.BOLD+Font.ITALIC);
 		ipPrompt.changeAlpha(0.4f);
 		txtServerip.setColumns(10);
 		txtServerip.setName("txtServerip");
 		
 		txtPort = new JTextField();
-		//txtPort.setText("12345");
+		txtPort.setText("12345");
 		TextPrompt portPrompt = new TextPrompt("Server Port", txtPort);
 		portPrompt.changeStyle(Font.BOLD+Font.ITALIC);
 		portPrompt.changeAlpha(0.4f);
@@ -454,13 +454,17 @@ public class MyChatWindow extends JFrame {
 					btnJoinPublicRoom.setVisible(false);
 					
 					txtEnterPrivateroomPasscode.setVisible(false);
+					txtEnterPrivateroomPasscode.setText("");
 					btnJoinPrivateRoom.setVisible(false);
 					
 					txtCreatePasscode.setVisible(false);
+					txtCreatePasscode.setText("");
 					txtMaxMember.setVisible(false);
+					txtMaxMember.setText("");
 					btnCreatePrivateRoom.setVisible(false);
 					
 					txtDeleteCode.setVisible(false);
+					txtDeleteCode.setText("");
 					btnDeletePrivateRoom.setVisible(false);
 					
 					break;
@@ -483,6 +487,7 @@ public class MyChatWindow extends JFrame {
 					btnJoinPublicRoom.setVisible(false);
 					
 					txtEnterPrivateroomPasscode.setVisible(true);
+					txtEnterPrivateroomPasscode.setText("");
 					btnJoinPrivateRoom.setVisible(true);
 					
 					txtCreatePasscode.setVisible(false);
@@ -501,7 +506,9 @@ public class MyChatWindow extends JFrame {
 					btnJoinPrivateRoom.setVisible(false);
 					
 					txtCreatePasscode.setVisible(true);
+					txtCreatePasscode.setText("");
 					txtMaxMember.setVisible(true);
+					txtMaxMember.setText("");
 					btnCreatePrivateRoom.setVisible(true);
 					
 					txtDeleteCode.setVisible(false);
@@ -520,6 +527,7 @@ public class MyChatWindow extends JFrame {
 					btnCreatePrivateRoom.setVisible(false);
 					
 					txtDeleteCode.setVisible(true);
+					txtDeleteCode.setText("");
 					btnDeletePrivateRoom.setVisible(true);
 					
 					break;
@@ -675,6 +683,15 @@ public class MyChatWindow extends JFrame {
 					chatArea.setText("");
 					optionPanel.setVisible(true);
 					chatPanel.setVisible(false);
+					//comboBox.setSelectedIndex(0);
+					chatPanel.setOpaque(false);
+					
+					//chatPanel.setLayout(null);
+					optionPanel.setVisible(true);   
+					//optionPanel.revalidate();
+					//optionPanel.repaint();
+					optionPanel.setOpaque(true);
+				
 				}
 			}
 		});
